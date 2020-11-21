@@ -66,13 +66,15 @@ runtimes
 
 (def average-runtime (double (/ (reduce + runtimes) (count movies-no-nil)))) ; 93.41
 
-;; I want to check deviation of each movie from mean, so we need variance and standard deviation
+;; I want to check movie deviation from mean, so we need variance and standard deviation
 
 ;; 1) Variance
 ;; variance is the expectation of the squared deviation of a random variable from its mean
 ;; v= ( (x1-mean)^2+(x2-mean)^2+ ... + (xn-mean)^2 ) / n
 
-(defn variance [data]
+(defn variance 
+  "A measure of how far a set of numbers is spread out."
+  [data]
     (def sqr (fn [x] (* x x)))
     (let [mv average-runtime]
       (/
@@ -81,9 +83,68 @@ runtimes
             #(sqr (- % mv)) data))
               (count data))))
 
-(variance runtimes)
+(Math/round (variance runtimes)) ; variance is 796
 
+;; 2) Standard deviation
 
+(defn standard-deviation
+  "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
+   shows how much variation or dispersion exists from the average (mean, or expected value).
+   A low standard deviation indicates that the data points tend to be very close to the mean,
+   whereas high standard deviation indicates that the data points are spread out over a large
+   range of values."
+  [data]
+  (Math/sqrt (variance data)))
+
+(Math/round (standard-deviation runtimes)) ;; the average deviation of the duration of the films from the average value is 28
+
+;;;;;;;;;;;; Mode ;;;;;;;;;;;;;;;
+
+;; - which duration is most recurring, can be more than one value!
+
+(defn mode [coll]
+  (let [frequency-distribution (frequencies coll)
+        sorted (sort-by
+                 (comp - second) frequency-distribution)
+        mxfreq (second (first sorted))]
+    (map first
+  (take-while
+    (fn [[val freq]]
+      (= mxfreq freq)) sorted))))
+
+(def mode-duration (mode runtimes)); its 90
+mode-duration
+;; we can see which movies have duration 90
+(def movies-mode-duration (filter #(= (:Runtime %) 90) movies)) 
+movies-mode-duration
+(count movies-mode-duration) ;971 movies
+
+;; which language is most recurring:
+
+(def languages (map :Language movies))
+(mode languages) ; its English (only english)
+;; we can see which movies have language english
+(def movies-mode-language (filter #(= (:Language %) "English") movies)) 
+movies-mode-language
+(count movies-mode-language) ; 10 955 movies on English
+
+;; which genre is most recurring:
+
+(def genres (map :Genres movies))
+(mode genres) ; its Drama (only Drama)
+;; we can see which movies have genre drama
+(def movies-mode-genre (filter #(= (:Genres %) "Drama") movies)) 
+movies-mode-genre
+(count movies-mode-genre) ; 1341 movie Drama
+
+;; which county is most recurring:
+
+(def countries (map :Country movies))
+(mode countries) ; its United States (only United States)
+;; we can see which movies have country United States
+(def movies-mode-country (filter #(= (:Country %) "United States") movies)) 
+movies-mode-country
+(count movies-mode-country) ; 8776 movie from United States
 
   
 
