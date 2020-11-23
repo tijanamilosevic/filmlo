@@ -1,4 +1,4 @@
-(ns statistics
+(ns statistics-netflix
   (:require [clojure.data.json :as json]))
 
 ; load data from json file
