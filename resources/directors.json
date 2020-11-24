@@ -1,0 +1,502 @@
+[
+   {
+      "Name":"Christopher Nolan",
+      "Rang":1,
+      "Points":143174
+   },
+   {
+      "Name":"Steven Spielberg",
+      "Rang":2,
+      "Points":131784
+   },
+   {
+      "Name":"Quentin Tarantino",
+      "Rang":3,
+      "Points":108315
+   },
+   {
+      "Name":"Martin Scorsese",
+      "Rang":4,
+      "Points":103526
+   },
+   {
+      "Name":"David Fincher",
+      "Rang":5,
+      "Points":82425
+   },
+   {
+      "Name":"Stanley Kubrick",
+      "Rang":6,
+      "Points":63606
+   },
+   {
+      "Name":"Robert Zemeckis",
+      "Rang":7,
+      "Points":63408
+   },
+   {
+      "Name":"Ridley Scott",
+      "Rang":8,
+      "Points":61355
+   },
+   {
+      "Name":"Francis Ford Coppola",
+      "Rang":9,
+      "Points":58488
+   },
+   {
+      "Name":"Clint Eastwood",
+      "Rang":10,
+      "Points":54355
+   },
+   {
+      "Name":"Frank Darabont",
+      "Rang":11,
+      "Points":52350
+   },
+   {
+      "Name":"Joel Coen",
+      "Rang":12,
+      "Points":51020
+   },
+   {
+      "Name":"Alfred Hitchcock",
+      "Rang":13,
+      "Points":41724
+   },
+   {
+      "Name":"Sam Mendes",
+      "Rang":14,
+      "Points":40712
+   },
+   {
+      "Name":"Danny Boyle",
+      "Rang":15,
+      "Points":35149
+   },
+   {
+      "Name":"James Cameron",
+      "Rang":16,
+      "Points":33463
+   },
+   {
+      "Name":"Todd Phillips",
+      "Rang":17,
+      "Points":30559
+   },
+   {
+      "Name":"Ron Howard",
+      "Rang":18,
+      "Points":30383
+   },
+   {
+      "Name":"Tim Burton",
+      "Rang":19,
+      "Points":30153
+   },
+   {
+      "Name":"Darren Aronofsky",
+      "Rang":20,
+      "Points":27776
+   },
+   {
+      "Name":"Roman Polanski",
+      "Rang":21,
+      "Points":26022
+   },
+   {
+      "Name":"Alejandro G. Iñárritu",
+      "Rang":22,
+      "Points":25665
+   },
+   {
+      "Name":"Woody Allen",
+      "Rang":23,
+      "Points":25099
+   },
+   {
+      "Name":"Sergio Leone",
+      "Rang":24,
+      "Points":24377
+   },
+   {
+      "Name":"Steven Soderbergh",
+      "Rang":25,
+      "Points":23179
+   },
+   {
+      "Name":"Chris Columbus",
+      "Rang":26,
+      "Points":22925
+   },
+   {
+      "Name":"Rob Reiner",
+      "Rang":27,
+      "Points":22834
+   },
+   {
+      "Name":"Tony Scott",
+      "Rang":28,
+      "Points":22797
+   },
+   {
+      "Name":"Denis Villeneuve",
+      "Rang":29,
+      "Points":22734
+   },
+   {
+      "Name":"Peter Weir",
+      "Rang":30,
+      "Points":22682
+   },
+   {
+      "Name":"Terry Gilliam",
+      "Rang":31,
+      "Points":22264
+   },
+   {
+      "Name":"Michael Mann",
+      "Rang":32,
+      "Points":22227
+   },
+   {
+      "Name":"David O. Russell",
+      "Rang":33,
+      "Points":22172
+   },
+   {
+      "Name":"Jonathan Demme",
+      "Rang":34,
+      "Points":22035
+   },
+   {
+      "Name":"Mel Gibson",
+      "Rang":35,
+      "Points":21893
+   },
+   {
+      "Name":"Gore Verbinski",
+      "Rang":36,
+      "Points":21634
+   },
+   {
+      "Name":"Milos Forman",
+      "Rang":37,
+      "Points":21205
+   },
+   {
+      "Name":"Wes Anderson",
+      "Rang":38,
+      "Points":20516
+   },
+   {
+      "Name":"Guy Ritchie",
+      "Rang":39,
+      "Points":20149
+   },
+   {
+      "Name":"Luc Besson",
+      "Rang":40,
+      "Points":20000
+   },
+   {
+      "Name":"Sidney Lumet",
+      "Rang":41,
+      "Points":19257
+   },
+   {
+      "Name":"Richard Linklater",
+      "Rang":42,
+      "Points":18652
+   },
+   {
+      "Name":"Edgar Wright",
+      "Rang":43,
+      "Points":18390
+   },
+   {
+      "Name":"M. Night Shyamalan",
+      "Rang":44,
+      "Points":18353
+   },
+   {
+      "Name":"Ang Lee",
+      "Rang":45,
+      "Points":"Ang Lee"
+   },
+   {
+      "Name":"Paul Thomas Anderson",
+      "Rang":46,
+      "Points":17949
+   },
+   {
+      "Name":"Tony Kaye",
+      "Rang":47,
+      "Points":17825
+   },
+   {
+      "Name":"Bryan Singer",
+      "Rang":48,
+      "Points":17703
+   },
+   {
+      "Name":"Lana Wachowski",
+      "Rang":49,
+      "Points":17471
+   },
+   {
+      "Name":"Lilly Wachowski",
+      "Rang":50,
+      "Points":17471
+   },
+   {
+      "Name":"Brian De Palma",
+      "Rang":51,
+      "Points":17432
+   },
+   {
+      "Name":"John Lasseter",
+      "Rang":52,
+      "Points":17414
+   },
+   {
+      "Name":"Oliver Stone",
+      "Rang":53,
+      "Points":17180
+   },
+   {
+      "Name":"Gus Van Sant",
+      "Rang":54,
+      "Points":16782
+   },
+   {
+      "Name":"George Lucas",
+      "Rang":55,
+      "Points":16410
+   },
+   {
+      "Name":"Peter Jackson",
+      "Rang":56,
+      "Points":16153
+   },
+   {
+      "Name":"Ben Affleck",
+      "Rang":57,
+      "Points":16143
+   },
+   {
+      "Name":"Damien Chazelle",
+      "Rang":58,
+      "Points":16062
+   },
+   {
+      "Name":"Tom Hooper",
+      "Rang":59,
+      "Points":16025
+   },
+   {
+      "Name":"Paul Greengrass",
+      "Rang":60,
+      "Points":15982
+   },
+   {
+      "Name":"James McTeigue",
+      "Rang":61,
+      "Points":15627
+   },
+   {
+      "Name":"Irvin Kershner",
+      "Rang":62,
+      "Points":15602
+   },
+   {
+      "Name":"Billy Wilder",
+      "Rang":63,
+      "Points":15231
+   },
+   {
+      "Name":"Alfonso Cuarón",
+      "Rang":64,
+      "Points":14845
+   },
+   {
+      "Name":"Jason Reitman",
+      "Rang":65,
+      "Points":14740
+   },
+   {
+      "Name":"Morten Tyldum",
+      "Rang":66,
+      "Points":14580
+   },
+   {
+      "Name":"Spike Jonze",
+      "Rang":67,
+      "Points":13809
+   },
+   {
+      "Name":"Fernando Meirelles",
+      "Rang":68,
+      "Points":13592
+   },
+   {
+      "Name":"Baz Luhrmann",
+      "Rang":69,
+      "Points":13581
+   },
+   {
+      "Name":"Gary Ross",
+      "Rang":70,
+      "Points":13556
+   },
+   {
+      "Name":"Michel Gondry",
+      "Rang":71,
+      "Points":13142
+   },
+   {
+      "Name":"Kathryn Bigelow",
+      "Rang":72,
+      "Points":13141
+   },
+   {
+      "Name":"Marc Forster",
+      "Rang":73,
+      "Points":12926
+   },
+   {
+      "Name":"James Mangold",
+      "Rang":74,
+      "Points":12816
+   },
+   {
+      "Name":"David Lynch",
+      "Rang":75,
+      "Points":12441
+   },
+   {
+      "Name":"Barry Levinson",
+      "Rang":76,
+      "Points":12395
+   },
+   {
+      "Name":"Steve McQueen",
+      "Rang":77,
+      "Points":12290
+   },
+   {
+      "Name":"Charles Chaplin",
+      "Rang":78,
+      "Points":11920
+   },
+   {
+      "Name":"Guillermo del Toro",
+      "Rang":79,
+      "Points":11807
+   },
+   {
+      "Name":"Michael Bay",
+      "Rang":80,
+      "Points":11714
+   },
+   {
+      "Name":"John McTiernan",
+      "Rang":81,
+      "Points":11641
+   },
+   {
+      "Name":"Akira Kurosawa",
+      "Rang":82,
+      "Points":11471
+   },
+   {
+      "Name":"Shane Black",
+      "Rang":83,
+      "Points":11064
+   },
+   {
+      "Name":"Nick Cassavetes",
+      "Rang":84,
+      "Points":10927
+   },
+   {
+      "Name":"Edward Zwick",
+      "Rang":85,
+      "Points":10862
+   },
+   {
+      "Name":"Neil Burger",
+      "Rang":86,
+      "Points":10853
+   },
+   {
+      "Name":"Mike Newell",
+      "Rang":87,
+      "Points":10786
+   },
+   {
+      "Name":"Martin McDonagh",
+      "Rang":88,
+      "Points":10457
+   },
+   {
+      "Name":"Olivier Nakache",
+      "Rang":89,
+      "Points":10299
+   },
+   {
+      "Name":"Éric Toledano",
+      "Rang":90,
+      "Points":10299
+   },
+   {
+      "Name":"Victor Fleming",
+      "Rang":91,
+      "Points":10200
+   },
+   {
+      "Name":"John Carpenter",
+      "Rang":92,
+      "Points":10179
+   },
+   {
+      "Name":"Tom Tykwer",
+      "Rang":93,
+      "Points":10146
+   },
+   {
+      "Name":"Tom Tykwer",
+      "Rang":94,
+      "Points":10146
+   },
+   {
+      "Name":"Louis Leterrier",
+      "Rang":95,
+      "Points":10094
+   },
+   {
+      "Name":"Paul Haggis",
+      "Rang":96,
+      "Points":10066
+   },
+   {
+      "Name":"Spike Lee",
+      "Rang":97,
+      "Points":9990
+   },
+   {
+      "Name":"Harold Ramis",
+      "Rang":98,
+      "Points":9909
+   },
+   {
+      "Name":"Duncan Jones",
+      "Rang":99,
+      "Points":9834
+   },
+   {
+      "Name":"Rob Marshall",
+      "Rang":100,
+      "Points":9531
+   }
+]
