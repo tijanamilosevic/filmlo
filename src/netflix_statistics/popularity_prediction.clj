@@ -32,7 +32,11 @@ movies-csv
 
 ;; load movies json
 (def json-movies (slurp "resources/movies.json"))
-(def movies (json/read-str json-movies :key-fn keyword))
+(def movies (json/read-str json-movies ))
+
+movies
+
+
 
 ;; streaming platform popularity:
 ;; acording to statista.com most popular streaming platform are:
@@ -43,45 +47,111 @@ movies-csv
 
 
 (defn insert-score [s points] 
-  (into s [{:score points}]))
+  (into s [{"score" points}]))
 
 (defn insert-score-platform [s points] 
-  (into s [{:score_platform points}]))
+  (into s [{"score platform" points}]))
 
 
 (def netflix-movies (into [] 
       (map (fn [e] (insert-score-platform e 3)) 
            (into [] 
-                 (filter #(= (:Netflix %) 1) movies)))))
+                 (filter #(= (% "Netflix") 1) movies)))))
 
 netflix-movies
+(count netflix-movies)
 
 (def hulu-movies (into [] 
       (map (fn [e] (insert-score-platform e 2)) 
            (into [] 
-                 (filter #(= (:Hulu %) 1) movies)))))
+                 (filter #(= (% "Hulu") 1) movies)))))
 hulu-movies
+(count hulu-movies)
 
 (def disney-movies (into [] 
       (map (fn [e] (insert-score-platform e 0)) 
            (into [] 
-                 (filter #(= (:Disney+ %) 1) movies)))))
+                 (filter #(= (% "Disney+") 1) movies)))))
 
 disney-movies
+(count disney-movies)
 
 (def prime-movies (into [] 
       (map (fn [e] (insert-score-platform e 1)) 
            (into [] 
-                 (filter #(and (= (:Netflix %) 0) (= (:Hulu %) 0) (= (:Disney+ %) 0)) movies)))))
-
+                 (filter #(and (= (% "Netflix") 0) (= (% "Hulu") 0) (= ( % "Disney+") 0)) movies)))))
 prime-movies
+(count prime-movies)
 
 ;; merging movies with platforme scores:
 (def netflix-hulu (into netflix-movies hulu-movies))
 (def disney-prime (into disney-movies prime-movies))
 (def movies-with-platform-score (into netflix-hulu disney-prime))
+
 movies-with-platform-score ;; from now, we use this movie data, and we will add other scores :)
 
+
+;;Rotten Tomatoes rating:
+;; according to Rotten Tomatoes web site:
+;; >60% - 2 points
+;; 30% - 59% - 1 point
+;; 0% - 29% - 0 points
+
+
+(defn to-int [value] 
+  (Integer. (re-find  #"\d+" value)))
+(to-int "85%")
+
+(defn insert-score-rotten-tomatoes [s points] 
+  (into s [{"score rotten tomatoes" points}]))
+
+;; be careful, Rotten tomatoes has empty values!
+
+(def has-value (filter #(not= (% "Rotten Tomatoes") "") movies-with-platform-score))
+(def no-vaule (filter #(= (% "Rotten Tomatoes") "") movies-with-platform-score))
+
+;; no-value r.t will get 0% (I suposse its not popular, or data is missing...)
+
+(defn zero [v] (if (empty? v) 0 v))
+
+(def zero-no-value (map (fn [x] (update-in x ["Rotten Tomatoes"] zero)) no-vaule))
+
+
+;; r.t with value into integer:
+(def int-has-value (map (fn [x] (update-in x ["Rotten Tomatoes"] to-int)) has-value))
+
+;; merge:
+(def int-rt-movies-with-platform-score (into zero-no-value int-has-value))
+(count int-rt-movies-with-platform-score)
+
+
+(def low-score (into [] 
+      (map (fn [e] (insert-score-rotten-tomatoes e 0)) 
+           (into [] 
+                 (filter #(<= (% "Rotten Tomatoes") 29) int-rt-movies-with-platform-score)))))
+low-score
+(count low-score) ; 12 308
+
+(def middle-score (into [] 
+      (map (fn [e] (insert-score-rotten-tomatoes e 1)) 
+           (into [] 
+                 (filter #(and (>= (% "Rotten Tomatoes") 30) (<= (% "Rotten Tomatoes") 59)) int-rt-movies-with-platform-score)))))
+
+middle-score
+(count middle-score) ; 1205
+
+(def high-score (into [] 
+      (map (fn [e] (insert-score-rotten-tomatoes e 2)) 
+           (into [] 
+                 (filter #(>= (% "Rotten Tomatoes") 60) int-rt-movies-with-platform-score)))))
+high-score
+(count high-score) ; 3272
+
+;; merge:
+(def low-mid (into low-score middle-score))
+(def movies-with-platform-rotten-tomato-scores (into low-mid high-score))
+
+movies-with-platform-rotten-tomato-scores ;; this movies data we use in next steps :)
 
 
 ;; actors points:
@@ -152,17 +222,6 @@ not-popular-actors
 ;;  second-group-rating 1 point, 
 ;;  and third-group-rating 2 points.
 
-
-
-
-
-
-
-;;Rotten Tomatoes rating:
-;; according to Rotten Tomatoes web site:
-;; >60% - 2 points
-;; 30% - 59% - 1 point
-;; 0% - 29% - 0 points
 
 
 
