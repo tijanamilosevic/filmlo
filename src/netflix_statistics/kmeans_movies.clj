@@ -61,10 +61,11 @@ ratings-mean ; mean is 5.09
 ;; our three groups:
 
 (def groups (point-groups guessed-means ratings distance))
-(def first-group-rating (groups 0))
-(def second-group-rating (groups 5.09))
-(def third-group-rating (groups 9.3))
-(type third-group-rating)
+(def bad-ranking-group (groups 0)) ;; first group
+(def average-ranking-group (groups 5.09)) ;; second group
+(def top-ranking-group (groups 9.3)) ;; third group
+(type top-ranking-group)
+
 
 ;; TO DO:  movies in these groups:
 
@@ -83,6 +84,6 @@ ratings-mean ; mean is 5.09
       (apply average (get point-groups o)) o)))
 
 (def groups-average (new-means average (point-groups guessed-means ratings distance) guessed-means)) ; (2.1484126984126988 5.589526222836502 7.63678398895792)
-(def first-group-average (first groups-average))
+(def first-group-average (first groups-average)) 
 (def second-group-average (second groups-average))
 (def third-group-average (last groups-average))
