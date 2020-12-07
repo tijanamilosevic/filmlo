@@ -6,10 +6,6 @@
 (def json-file (slurp "resources/netflix_titles.json"))
 
 (def netflix-portfolio (json/read-str json-file :key-fn keyword))
-(json/read-str json-file :key-fn keyword)
-
-(first netflix-portfolio)
-((first netflix-portfolio) :type)
 
 ;;;;;;;;;Movies
 (def movies (filter #(= (:type %) "Movie") netflix-portfolio))
@@ -24,7 +20,6 @@
 
 ;;;;;;;;;;count Tv-shows
 (def sum-tvshows (count (filter #(= (:type %) "TV Show") netflix-portfolio)))
-(- sum-all sum-movies)
 
 ;;;;;;;;;;min duration movie
 (def movies-duration (map :duration movies))
@@ -34,8 +29,6 @@
 min-duration-movie ;3
 
 ; we need duration like "3 min":
-;(map str [min-duration-movie][" min"])
-(str min-duration-movie " min")
 (def get-min-duration-movie (filter #(= (:duration %) (str min-duration-movie " min")) netflix-portfolio))
 get-min-duration-movie
 
@@ -53,15 +46,10 @@ get-max-duration-movie
 (type movies-duration) ;it is lazy sequence
 
 ; duration is like "90 min", but we want 90 (number):
-(Integer. (re-find  #"\d+" ((first netflix-portfolio) :duration)))
 (defn convertor [s] (Integer. (re-find  #"\d+" s)))
-(convertor "90 min")
-;(def movies-duration-int (map (fn [e](Integer. (re-find  #"\d+" e ))) movies-duration))
 
 ;average function:
 (defn average-movies [s] (double (/ (reduce + s) sum-movies)))
-(reduce + movies-duration-int)
-(/ (reduce + movies-duration-int) sum-movies)
 
 (def movies-duration-average (Math/round (average-movies movies-duration-int)))
 movies-duration-average ; average is 99 min
@@ -74,8 +62,6 @@ movies-duration-average ; average is 99 min
 min-duration-tvshow ;1 Season
 
 ; we need duration like "1 Season":
-;(map str [min-duration-movie][" min"])
-(str min-duration-tvshow " Season")
 (def get-min-duration-tvshows (filter #(= (:duration %) (str min-duration-tvshow " Season")) netflix-portfolio))
 get-min-duration-tvshows
 
@@ -191,10 +177,7 @@ tvshows
 ;;;;;;;;search by number of seasons for tv shows less than ...
 (sort tvshows-duration-int)
 (type (sort tvshows-duration-int))
-(defn get-result
-  [coll m]
-  (take-while
-   #(<= (:month %) m) coll))
+
 (defn search-by-season-min [season] (filter #(< (:release_year %) season) tvshows))
 (search-by-season-min 2018)
 ;;;;;;;;search by number of seasons for tv shows grater than ...

@@ -9,8 +9,6 @@
 
 (def movies (json/read-str json-file :key-fn keyword))
 
-(first movies)
-
 ;; Counting all movies
 (def num-movies (count movies)) ; 16 744
 
@@ -83,7 +81,7 @@ runtimes
             #(sqr (- % mv)) data))
               (count data))))
 
-(Math/round (variance runtimes)) ; variance is 796
+(def movies-variance (Math/round (variance runtimes))) ; variance is 796
 
 ;; 2) Standard deviation
 
@@ -96,7 +94,7 @@ runtimes
   [data]
   (Math/sqrt (variance data)))
 
-(Math/round (standard-deviation runtimes)) ;; the average deviation of the duration of the films from the average value is 28
+(def movies-standard-deviation (Math/round (standard-deviation runtimes))) ;; the average deviation of the duration of the films from the average value is 28
 
 ;;;;;;;;;;;; Mode ;;;;;;;;;;;;;;;
 

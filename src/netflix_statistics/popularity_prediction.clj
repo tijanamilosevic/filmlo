@@ -222,16 +222,12 @@ no-nil-director-movies
 (defn contains [director]
  (.contains names director))
 
-(contains "Spike Jonze"); true :)
-
-
 (defn directors-points [director]
   (cond
     (= (contains director) true) 1
     true 0))
 
-
- (def has-value-with-score (map #(insert-score-director % (directors-points (:directors %)))
+(def has-value-with-score (map #(insert-score-director % (directors-points (:directors %)))
        no-nil-director-movies))
 
 ;; merge zero-score and 
@@ -252,9 +248,6 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 ;; check if sequence group contains imdb rating:
 (defn contains-imdb [s imdb]
  (.contains s imdb))
-
- (contains-imdb bad-ranking-group 1.6) ; true
- 
 
 ;; checking nil values:
 (count (filter #(= (:imdb %) "") movies-with-platform-rotten-tomato-scores-director))
@@ -283,9 +276,13 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
        no-nil-imdb-movies))
 
 ;; merge nil and no nil imdb movies:
-
 (def all-scores (into zero-score-imdb-movies score-imdb-movies))
-(count all-scores)
+
+;; movies in these three groups (ranking by imdb)
+(def bad-ranking (filter #(= (:score-imdb %) 0) all-scores))
+(def average-ranking (filter #(= (:score-imdb %) 1) all-scores))
+(def top-ranking (filter #(= (:score-imdb %) 2) all-scores))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; final score calculation
 ;;    final-score = score-platform + score-rotten-tomatoes + score-director + score-imdb
@@ -324,69 +321,9 @@ not-popular-movies
 ;; writeing movies with popularity to scores.json file:
 (spit "resources/scores.json" (json/write-str movies-popularity))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; actors points:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; actors points (actualy, there is no actors in movies.json file):
 
-;; ; load json file
-;; (def json-actors (slurp "resources/actors.json"))
-;; (def actors (json/read-str json-actors :key-fn keyword))
 
-;; actors
-;; ; persistent vector
-;; (type actors)
-
-;; (def actors-rates (map :rating actors))
-;; actors-rates
-
-;; ; (filter #(= (:rating %) "") actors-rates)
-
-;; (def max-rating (apply min actors-rates))
-;; max-rating ; 299
-
-;; (def min-rating (apply max actors-rates))
-;; min-rating ; 4875
-
-;; (def average-rating (double (/ (reduce + actors-rates) (count actors-rates)))) ; 670.464
-;; average-rating
-
-;; ;; if actor raiting is <=average-rating its popular (1 point)
-;; ;; >average-rating its not popular (0 points)
-
-;; (defn score-to-category-actors [score]
-;;   (cond
-;;     (<= score average-rating) 1
-;;     true 0))
-
-;; (score-to-category-actors 670.4888)
-
-;; ;; insert score in every actor
-;;  (def actors-scores (map #(insert-score % (score-to-category-actors (:rating %)))
-;;        actors))
-;; actors-scores ;; actors with scores
-
-;; (def names-actors ( map :name actors-scores))
-
-;; ;; TO DO: add score to movies!
-;; (defn contains-actor [actor]
-;;  (.contains names-actors actor))
-
-;; (contains-actor "John Cho")
-
-;; ; insert score function:
-;; (defn insert-score-actors [actor points] 
-;;   (assoc actor :score-actor points))
-
-;; ;; if movies actor is in actors -> gets actors score
-;; ;; if not -> score is 0
-;; (defn movie-score-actor [actor]
-;;   (cond
-;;     (= (contains-actor actor) true) ( map :score (filter #(= (:name %) actor) actors-scores))
-;;     true 0))
-
-;; (movie-score-actor "John Chof")
-
-;; (first ( map :score (filter #(= (:name %) "John Chof") actors-scores)))
-
-;; actors-scores
 
 
 
