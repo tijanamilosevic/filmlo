@@ -147,7 +147,6 @@
     (= uri "/movies")(movies-selected)
     (= uri "/movies-stats")(movies-stats-selected)
     (= uri "/movies-popularity") (movies-popularity-selected)
-    ;; (= uri "/iMDB-ranking-groups") (register-login-selected)
     true (imdb-ranking-selected))) 
 
 
@@ -159,17 +158,13 @@
      [:meta {:charset "UTF-8"}] 
      [:title title]
      (include-css "/style.css")]
-    [:body
-     
+    [:body   
      [:div#header
       [:div
        [:a.logo
         [:img {:src "/logo.png" :alt "FilmLo"}]]
-       (menu uri)]]
-     
-     [:div#body
-     
-      content]
+       (menu uri)]]    
+     [:div#body content]
      
       ;;  [:div#footer
       ;;   [:p "Copyright &copy; 2020. All Rights Reserved"]]

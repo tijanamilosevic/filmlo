@@ -144,22 +144,52 @@ top-3-release-years
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;search:
 ;;;;;;;;by release year
-(defn search-by-year [year] (filter #(= (:release_year %) year) netflix-portfolio))
+(defn search-by-year [year] 
+  (filter #(= (:release_year %) year) netflix-portfolio))
 (search-by-year 1986)
 
 ;;;;;;;; less than year
-(defn search-by-year-min [year] (filter #(< (:release_year %) year) netflix-portfolio))
+(defn search-by-year-min [year] 
+  (filter #(< (:release_year %) year) netflix-portfolio))
 (search-by-year-min 2000)
 
 ;;;;;;;; grater than year
-(defn search-by-year-max [year] (filter #(> (:release_year %) year) netflix-portfolio))
+(defn search-by-year-max [year] 
+  (filter #(> (:release_year %) year) netflix-portfolio))
 (search-by-year-max 2018)
 
 ;;;;;;;;by name
-(defn search-by-name [name] (filter #(= (:title %) name) netflix-portfolio))
-(search-by-name "Dark")
+
+(defn capitalize-words 
+  "Capitalize every word in a string"
+  [s]
+  (->> (clojure.string/split (str s) #"\b") 
+       (map clojure.string/capitalize)
+       clojure.string/join))
+
+(defn search-by-name [name] 
+  (filter #(= (:title %) (capitalize-words name)) netflix-portfolio))
 
 ;;;;;;;;by type
+(defn search-by-type-movie 
+  "Returns type Movie"
+  [type] 
+  (filter #(= (:type %) (clojure.string/capitalize type)) netflix-portfolio))
+
+(defn transfom-string
+  "Returns specific string ( like TV Show), because type is TV Show, not tv show etc..."
+  [str-type]
+  (try
+  (str (clojure.string/upper-case (subs str-type 0 2)) " " (clojure.string/capitalize (subs str-type 3)))
+  (catch Exception e (identity "aaa"))))
+
+
+(defn search-by-type-tv-show 
+  "Returns type TV Show"
+  [type]
+  (filter #(= (:type %) (transfom-string type)) netflix-portfolio))
+
+
 ;I already defined movies and tv-shows
 movies
 tvshows
@@ -167,17 +197,22 @@ tvshows
 ;(filter #(= (:type %) "TV Show") netflix-portfolio)
 
 ;;;;;;;;by country
-(defn search-by-country [country] (filter #(= (:country %) country) netflix-portfolio))
-(search-by-country "Germany")
+(defn search-by-country [country] 
+  (filter #(= (:country %) (capitalize-words country)) netflix-portfolio))
+(search-by-country "united states")
 
 ;;;;;;;;search by number of seasons for tv shows
-(defn search-by-season [season] (filter #(= (:duration %) (str season " Seasons")) tvshows))
+(defn search-by-season [season] 
+  (filter #(= (:duration %) (str season " Seasons")) tvshows))
 (search-by-season 11)
 
 ;;;;;;;;search by number of seasons for tv shows less than ...
 (sort tvshows-duration-int)
 (type (sort tvshows-duration-int))
 
-(defn search-by-season-min [season] (filter #(< (:release_year %) season) tvshows))
+(defn search-by-season-min [season] 
+  (filter #(< (:release_year %) season) tvshows))
 (search-by-season-min 2018)
 ;;;;;;;;search by number of seasons for tv shows grater than ...
+
+

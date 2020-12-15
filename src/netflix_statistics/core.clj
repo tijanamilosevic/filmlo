@@ -7,17 +7,24 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.middleware.params :refer [wrap-params]]
-            [index :refer [index-page]]))
+            [index :refer [index-page]]
+            [netflix-portfolio :refer [netflix-portfolio-page]]))
 
    
 (defroutes handler
   (GET "/" [] (index-page "/"))
+  (GET "/netflix-portfolio" [] (netflix-portfolio-page "/netflix-portfolio"))
+  (POST "/netflix-portfolio" [criteria] 
+        (netflix-portfolio-page "/netflix-portfolio" criteria 1))
+  (GET "/netflix-portfolio/:criteria&:page" [criteria page]
+      (netflix-portfolio-page "/netflix-portfolio" criteria (Integer/valueOf page)))
   (route/resources "/")
   (route/not-found "404 Page not found"))
 
 
 (def app
   (-> #'handler
+    (wrap-params)
     (session/wrap-noir-flash)
     (wrap-stacktrace)))
 
