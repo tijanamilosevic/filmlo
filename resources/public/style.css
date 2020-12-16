@@ -175,6 +175,14 @@ body {
 	height: 200px;
 }
 
+.message {
+	color: #ff9600 !important;
+	/* font-family: 'Forum-Regular' !important; */
+	letter-spacing: 0.05em;
+	margin-left: 32px !important;
+	/* margin-top: 55px !important; */
+}
+
 /* #footer { */
 	/* height: 200px; */
 	/*margin: 0;*/

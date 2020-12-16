@@ -31,22 +31,29 @@
    [:div.form
     [:table {:frame "box"}
      [:tr
+      [:th "No."]
       [:th "Name"]
       [:th "Type"]
       [:th "Year"]
       [:th "Duration"]
       [:th "Country"]]
-     (for [movie movies]
+     (let [x (atom {})]
+       (swap! x assoc :no 0)
+       (for [movie movies]
        (identity [:tr
+                  [:td [:div (:no (swap! x update :no inc))]]
                   [:td [:div (movie :title)]]
                   [:td [:div (movie :type)]]
                   [:td [:div (movie :release_year)]]
                   [:td [:div (movie :duration)]]
-                  [:td [:div (movie :country)]]]))]]])
+                  [:td [:div (movie :country)]]])))]]])
+
+(list-portfolio netflix-portfolio)
 
 
 (defn- pagination
   [criteria page last]
+
   (if-not (= 0 last) 
     [:p
      (if-not (= 1 page)
@@ -54,13 +61,15 @@
         [:a {:href (str "/netflix-portfolio/" criteria "&1")} "<< First"] " "
         (if-not (= 2 page)
           [:a {:href (str "/netflix-portfolio/" criteria "&" (- page 1))} "< Previous"])])
+     
      (if-not (= 1 last)
        [:span " " [:b (str page " of " last " pages")] " "])
+     
      (if-not (= last page)
        [:span
         [:a {:href (str "/netflix-portfolio/" criteria "&" (+ page 1))} "Next >"] " "
         (if-not (= (- last 1) page)
-          [:a {:href (str "/netflix-portfolio/" criteria "&" last)} "Last >>"])])]))
+          [:a {:href (str "/netflix-portfolio/" criteria "&" last)} "Last >>"])])]))  
 
 
 (defn- portfolio-layout 
@@ -69,7 +78,8 @@
   [:div.body
    (movie-search-box)
    (let [movies (take 10 (drop (* 10 (- page 1)) portfolio))]
-     (if-not (empty? movies) 
+    (if-not (or (= criteria "") (clojure.string/blank? criteria))
+       (if-not (empty? movies) 
        [:div
         [:div {:style "float: right;"}
          (pagination criteria page
@@ -77,11 +87,18 @@
                        (if (ratio? number-of-pages)
                          (int (inc (Math/floor (double number-of-pages))))
                          number-of-pages)))]
+        [:div {:style "float: right;"}
+         [:p
+          [:span (str (count portfolio)" results " "found")]]]
         (list-portfolio movies)]
        (if (= criteria "all")
          [:p "List is empty."]
-         [:p "No matching data."])))])
+         [:p "No matching data."]))
+      [:div {:class "message"} "You must enter search criteria!"]))])
 
+(if-not (or (= "cao" "") (clojure.string/blank? "  "))
+  (identity 1)
+  (identity 0))
 
 (defn try-convert-string [str]
   (try 
@@ -101,8 +118,9 @@
     :else nil))
 
 
+
 (defn netflix-portfolio-page
-  "Show Books page depending on search criteria." 
+  "Show Netflix-portfolio page depending on search criteria." 
   ([uri] (template-page 
            "Netflix portfolio" 
            uri 
@@ -113,6 +131,8 @@
                          (portfolio-layout (if (= criteria "all")
                                               netflix-portfolio
                                              (get-data-by-search-criteria criteria)) criteria page))))
+
+(netflix-portfolio-page "/netflix-portfolio" "" 1)
 
 
 
