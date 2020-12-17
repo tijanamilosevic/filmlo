@@ -1,20 +1,37 @@
 (ns movies-statistics
- (:require [clojure.data.json :as json]))
+ (:require [clojure.data.json :as json]
+           [clojure.string :refer [lower-case blank?]]))
 
 ;; this file contains statistics for movies.json file, all MOVIES all over the world, with IMDb rating
 
 ; load data from json file
 
-(def json-file (slurp "resources/movies.json"))
+(def json-movies (slurp "resources/movies.json"))
+(def movies-str (json/read-str json-movies ))
 
-(def movies (json/read-str json-file :key-fn keyword))
+(defn to-keyword
+ "Return string as keyword(lower case, with -)." 
+  [str]
+  (keyword (lower-case 
+            (clojure.string/replace str " " "-"))))
+
+ 
+(defn keywordise
+  "Apply to-keyword to all movies in vector."
+  [movies]
+  (map #(into {} (map (fn [[k v]]
+                        (vector (to-keyword k) v))
+                      %))
+       movies))
+
+(def movies (keywordise (json/read-str json-movies)))
 
 ;; Counting all movies
 (def num-movies (count movies)) ; 16 744
 
 ;; the oldest movie
 
-(def movies-years (map :Year movies))
+(def movies-years (map :year movies))
 movies-years
 
 (def the-oldest-movie-year (apply min movies-years))
@@ -24,7 +41,7 @@ the-oldest-movie-year ;1902
 (defn get-the-oldest-movie 
   "Return the oldest movie."
   []
-  (filter #(= (:Year %) the-oldest-movie-year) 
+  (filter #(= (:year %) the-oldest-movie-year) 
           movies))
 
 (get-the-oldest-movie) ; only "A Trip to the Moon"
@@ -38,7 +55,7 @@ the-newest-movie-year ;2020
 (defn get-the-newest-movie
   "Returns the newest movie."
  []
-  (filter #(= (:Year %) the-newest-movie-year) 
+  (filter #(= (:year %) the-newest-movie-year) 
           movies))
 
 (get-the-newest-movie) ; we have many movies in 2020
@@ -47,20 +64,20 @@ the-newest-movie-year ;2020
 ;; so we have movies from 1902 to 2020 
 
 ;; movies on Netflix:
-(def movies-netflix (filter #(= (:Netflix %) 1) movies))
+(def movies-netflix (filter #(= (:netflix %) 1) movies))
 (def count-netflix (count movies-netflix)) ; 3560
 
 ;; movies on Hulu: 
-(def movies-hulu (filter #(= (:Hulu %) 1) movies))
+(def movies-hulu (filter #(= (:hulu %) 1) movies))
 (def count-hulu (count movies-hulu)) ; 903
 
 ;; movies on Disney+:
-(def movies-disney(filter #(= (:Disney+ %) 1) movies))
+(def movies-disney(filter #(= (:disney+ %) 1) movies))
 (def count-disney (count movies-disney)) ; 564
 
 ;; movies on Prime Video
-(def movies-prime(filter #(and (not= (:Netflix %) 1) (not= (:Hulu %) 1) (not= (:Disney+ %) 1)) movies)) 
-(def count-prime (count movies-prime)) ;; 11 758 movies on Prime Video
+(def movies-prime(filter #(= (:prime-video %) 1) movies)) 
+(def count-prime (count movies-prime)) ;; 12 354 movies on Prime Video
 
 ;; average runtime(mean)
 
@@ -68,14 +85,14 @@ the-newest-movie-year ;2020
 (defn count-nil-vaules
  "Counts nil runtime values." 
   [] 
-  (count (filter #(= (:Runtime %) "") 
+  (count (filter #(= (:runtime %) "") 
                  movies))) 
 (count-nil-vaules); 592 nil ("") values
 
 ; we do not need nil values, we choose movies WITH duration
-(def movies-no-nil (filter #(not= (:Runtime %) "") movies)) 
+(def movies-no-nil (filter #(not= (:runtime %) "") movies)) 
 
-(def runtimes (map :Runtime movies-no-nil))
+(def runtimes (map :runtime movies-no-nil))
 
 (defn average-runtime 
   "Returns average runtime."
@@ -149,7 +166,7 @@ mode-duration
 (defn movies-mode-duration
  "Returns movies with mode duration." 
   []
-  (filter #(= (:Runtime %) (nth mode-duration 0)) 
+  (filter #(= (:runtime %) (nth mode-duration 0)) 
           movies)) 
 
 (movies-mode-duration)
@@ -157,14 +174,14 @@ mode-duration
 
 ;; which language is most recurring:
 
-(def languages (map :Language movies))
+(def languages (map :language movies))
 (def mode-language (mode languages)); its English (only english)
 
 ;; we can see which movies have language english
 (defn movies-mode-language
   "Returns movies with most recur language."
   []
-  (filter #(= (:Language %) (nth mode-language 0)) 
+  (filter #(= (:language %) (nth mode-language 0)) 
           movies)) 
 
 (movies-mode-language)
@@ -172,14 +189,14 @@ mode-duration
 
 ;; which genre is most recurring:
 
-(def genres (map :Genres movies))
+(def genres (map :genres movies))
 (def mode-genre (mode genres)) ; its Drama (only Drama)
 
 ;; we can see which movies have genre drama
 (defn movies-mode-genre
  "Returns movies with most recur genre." 
   []
-  (filter #(= (:Genres %) (nth mode-genre 0)) 
+  (filter #(= (:genres %) (nth mode-genre 0)) 
           movies)) 
 
 (movies-mode-genre)
@@ -187,14 +204,14 @@ mode-duration
 
 ;; which country is most recurring:
 
-(def countries (map :Country movies))
+(def countries (map :country movies))
 (def mode-country (mode countries)); its United States (only United States)
 
 ;; we can see which movies have country United States
 (defn movies-mode-country
   "Returns movies with most recur country." 
   []
-  (filter #(= (:Country %) "United States") 
+  (filter #(= (:country %) "United States") 
           movies)) 
 
 (movies-mode-country)
@@ -213,7 +230,7 @@ mode-duration
 (defn search-by-title 
   "Search movies by title."
   [title movies-passed] 
-  (filter #(= (:Title %) (capitalize-words title)) 
+  (filter #(= (:title %) (capitalize-words title)) 
           movies-passed))
 
 (defn try-convert-string 
@@ -226,23 +243,23 @@ mode-duration
 (defn search-by-year
  "Search movies by year." 
   [year movies-passed] 
-  (filter #(= (:Year %) (try-convert-string year)) 
+  (filter #(= (:year %) (try-convert-string year)) 
           movies-passed))
 
 (defn search-by-runtime
  "Search movies by runtime." 
   [runtime movies-passed] 
-  (filter #(= (:Runtime %) (try-convert-string runtime)) 
+  (filter #(= (:runtime %) (try-convert-string runtime)) 
           movies-passed))
 
 (defn search-by-country
  "Search movies by contry." 
   [country movies-passed] 
-  (filter #(.contains (:Country %) (capitalize-words country)) 
+  (filter #(.contains (:country %) (capitalize-words country)) 
           movies-passed))
 
 (defn search-by-genre
  "Search movies by genre." 
   [genre movies-passed] 
-  (filter #(.contains (:Genres %) (capitalize-words genre)) 
+  (filter #(.contains (:genres %) (capitalize-words genre)) 
           movies-passed))

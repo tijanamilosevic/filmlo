@@ -6,6 +6,11 @@ body {
 	min-width: 960px;
 	padding: 0;
 }
+
+.justy {
+	text-align: justify !important;
+	text-justify: inter-word !important;
+}
 #header {
 	height: 161px;
 	margin: 0;

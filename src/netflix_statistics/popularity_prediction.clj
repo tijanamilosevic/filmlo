@@ -17,7 +17,6 @@
 ;; 3) director popularity-  0-not popular, 1-popular
 ;; 4) IMDb rating-  0-not popular, 1-mid-popular, 2-popular
 
-
 ;; RANKING LIST:
 ;; 0,1,2,3,4 points - not popular movies
 ;; 5,6,7,8 points- popular movies
@@ -38,23 +37,25 @@
 
 ;; movies atributes are in string form: "Name", "Actors", "Rotten Tomatoes" etc...
 ;; but, its easier to work with keys: :name, :actors, :rotten-tomatoes
-;; sp we neet to transform movies-str persistent vector
+;; so we need to transform movies-str persistent vector
 
 ;; "Rotten Tomatoes" to :rotten-tomatoes
-(defn to-keyword [str]
-  (keyword (lower-case (clojure.string/replace str " " "-"))))
+(defn to-keyword
+ "Return string as keyword(lower case, with -)." 
+  [str]
+  (keyword (lower-case 
+            (clojure.string/replace str " " "-"))))
 
-;; apply to all movies in vector:
-(defn keywordise [movies]
+ 
+(defn keywordise
+  "Apply to-keyword to all movies in vector."
+  [movies]
   (map #(into {} (map (fn [[k v]]
                         (vector (to-keyword k) v))
                       %))
        movies))
 
 (def movies (keywordise (json/read-str json-movies)))
-movies
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 1. streaming platform popularity:
 ;; acording to statista.com most popular streaming platform are:
@@ -64,10 +65,12 @@ movies
 ;; and Disney (0 points).
 
 
-(defn insert-score [movie points] 
-  (assoc movie :score points))
+;; (defn insert-score [movie points] 
+;;   (assoc movie :score points))
 
-(defn insert-score-platform [movie points] 
+(defn insert-score-platform
+  "Insert platform score keyvalue to one movie." 
+  [movie points] 
   (assoc movie :score-platform points))
 
 
@@ -115,7 +118,6 @@ movies-with-platform-score ;; from now, we use this movie data, and we will add 
 (defn to-int [value] 
   (Integer. (re-find  #"\d+" value)))
 
-(to-int "85%")
 
 (defn insert-score-rotten-tomatoes [movie points] 
    (assoc movie :score-rotten-tomatoes points))
@@ -134,6 +136,7 @@ movies-with-platform-score ;; from now, we use this movie data, and we will add 
                           (update x :rotten-tomatoes zero)) 
                         no-vaule))
 zero-no-value
+
 
 
 ;; r.t with value into integer ("85% -> 85"):
@@ -158,34 +161,6 @@ int-has-value
 
 movies-with-platform-rotten-tomato-scores ;; this movies data we use in next steps :)
 
-;; (def low-score (into [] 
-;;       (map (fn [e] (insert-score-rotten-tomatoes e 0)) 
-;;            (into [] 
-;;                  (filter #(<= (% "Rotten Tomatoes") 29) int-rt-movies-with-platform-score)))))
-;; low-score
-;; (count low-score) ; 12 308
-
-;; (def middle-score (into [] 
-;;       (map (fn [e] (insert-score-rotten-tomatoes e 1)) 
-;;            (into [] 
-;;                  (filter #(and (>= (% "Rotten Tomatoes") 30) (<= (% "Rotten Tomatoes") 59)) int-rt-movies-with-platform-score)))))
-
-;; middle-score
-;; (count middle-score) ; 1205
-
-;; (def high-score (into [] 
-;;       (map (fn [e] (insert-score-rotten-tomatoes e 2)) 
-;;            (into [] 
-;;                  (filter #(>= (% "Rotten Tomatoes") 60) int-rt-movies-with-platform-score)))))
-;; high-score
-;; (count high-score) ; 3272
-
-;; ;; merge:
-;; (def low-mid (into low-score middle-score))
-;; (def movies-with-platform-rotten-tomato-scores (into low-mid high-score))
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 3. director popularity:
 ;; here is list 100 most popular directors in the world, so is movies director is on this list its 1 point, if not 0 poins
 
@@ -200,10 +175,6 @@ directors
 
 ; director names sequence:
 (def names ( map :Name directors))
-names
-
-(type names)
-
 
 ; check null values in movies data:
 (def nil-director-movies (filter #(= (:directors %) "") movies-with-platform-rotten-tomato-scores))
@@ -310,23 +281,39 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 (def movies-popularity (map #(insert-popularity % (popularity (:score-final %)))
        movies-final-score))
 
-(count (filter #(= (:popularity %) "popular") movies-popularity)) ; 2748 popular movies!
+(count (filter #(= (:popularity %) "popular") movies-popularity)) ; 2092 popular movies!
 
-(def popular-movies (filter #(= (:popularity %) "popular") movies-popularity))
-popular-movies
+(defn popular-movies
+ "Returns popular movies." 
+  []
+  (filter #(= (:popularity %) "popular") 
+          movies-popularity))
 
-(def not-popular-movies (filter #(= (:popularity %) "not popular") movies-popularity))
-not-popular-movies
+
+(defn not-popular-movies
+ "Returns not popular movies." 
+  []
+  (filter #(= (:popularity %) "not popular") 
+          movies-popularity))
+
+;;;;;;; working with popular movies
+
+(defn num-popular-movies
+  "Counts popular movies. "
+  []
+  (count (popular-movies)))
+
+(defn top-movies
+  "Returns movies with highest score (8)"
+  []
+  (filter #(= (:score-final %) 8) 
+          (popular-movies)))
+
+(defn num-top-movies
+  "Counts top movies. "
+  []
+  (count (top-movies)))
+
 
 ;; writeing movies with popularity to scores.json file:
 (spit "resources/scores.json" (json/write-str movies-popularity))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; actors points (actualy, there is no actors in movies.json file):
-
-
-
-
-
-
-
-

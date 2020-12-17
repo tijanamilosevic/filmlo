@@ -12,7 +12,8 @@
             [movies :refer [movies-page]]
             [hulu :refer [hulu-page]]
             [disney :refer [disney-page]]
-            [prime :refer [prime-page]]))
+            [prime :refer [prime-page]]
+            [movies-popularity :refer [movies-popularity-page]]))
   
 (defroutes handler
   (GET "/" [] (index-page "/"))
@@ -41,6 +42,11 @@
         (prime-page "/movies/prime" criteria 1))
   (GET "/movies/prime/:criteria&:page" [criteria page]
       (prime-page "/movies/prime" criteria (Integer/valueOf page)))
+  (GET "/movies-popularity" [] (movies-popularity-page "/movies-popularity"))
+  (POST "/movies-popularity" [criteria] 
+        (movies-popularity-page "/movies-popularity" criteria 1))
+  (GET "/movies-popularity/:criteria&:page" [criteria page]
+      (movies-popularity-page "/movies-popularity" criteria (Integer/valueOf page)))
   (route/resources "/")
   (route/not-found "404 Page not found"))
 

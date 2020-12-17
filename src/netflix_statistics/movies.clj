@@ -29,7 +29,7 @@
              [:tr
               [:td [:div "*type 'all' to get full list"]]]])])
 
-(movie-search-box)
+
 (defn- list-movies
   "List Movies."
   [movies]
@@ -50,12 +50,12 @@
        (for [movie movies]
        (identity [:tr
                   [:td [:div (:no (swap! x update :no inc))]]
-                  [:td [:div (movie :Title)]]
-                  [:td [:div (movie :Genres)]]
-                  [:td [:div (movie :Year)]]
-                  [:td [:div (movie :Runtime)]]
-                  [:td [:div (movie :Country)]]
-                  [:td [:div (movie :IMDb)]]])))]]])
+                  [:td [:div (movie :title)]]
+                  [:td [:div (movie :genres)]]
+                  [:td [:div (movie :year)]]
+                  [:td [:div (movie :runtime)]]
+                  [:td [:div (movie :country)]]
+                  [:td [:div (movie :imdb)]]])))]]])
 
 
 (defn- pagination

@@ -1,18 +1,20 @@
-(ns disney
+(ns movies-popularity
   (:require [template :refer [template-page]]
-            [movies-statistics :refer [movies-disney search-by-genre search-by-country search-by-runtime
+            [movies-statistics :refer [search-by-genre search-by-country search-by-runtime
                                        search-by-year search-by-title]]
+            [popularity-prediction :refer [popular-movies]]
             [hiccup.form :refer [form-to text-field submit-button]]))
+
 
 (defn- movie-search-box 
   "Show movie search form."
   []
   [:div.movie
-   [:h2 "Search Disney+ movies:"]
-   (form-to [:post "/movies/disney"]
+   [:h2 "Search popular movies on Netflix, Hulu, Disney+ and Prime Video:"]
+   (form-to [:post "/movies-popularity"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration, genre and platform: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -20,11 +22,12 @@
              [:tr
               [:td [:div "*type 'all' to get full list"]]]])])
 
-(defn- list-movies
-  "List Movies."
+
+(defn- list-movies 
+  "List popular movies."
   [movies]
   [:div
-   [:h2 "Movies"]
+   [:h2 "Popular movies"]
    [:div.form
     [:table {:frame "box"}
      [:tr
@@ -55,16 +58,16 @@
     [:p
      (if-not (= 1 page)
        [:span
-        [:a {:href (str "/movies/disney/" criteria "&1")} "<< First"] " "
+        [:a {:href (str "/movies-popularity/" criteria "&1")} "<< First"] " "
         (if-not (= 2 page)
-          [:a {:href (str "/movies/disney/" criteria "&" (- page 1))} "< Previous"])])  
+          [:a {:href (str "/movies-popularity/" criteria "&" (- page 1))} "< Previous"])])  
      (if-not (= 1 last)
        [:span " " [:b (str page " of " last " pages")] " "])    
      (if-not (= last page)
        [:span
-        [:a {:href (str "/movies/disney/" criteria "&" (+ page 1))} "Next >"] " "
+        [:a {:href (str "/movies-popularity/" criteria "&" (+ page 1))} "Next >"] " "
         (if-not (= (- last 1) page)
-          [:a {:href (str "/movies/disney/" criteria "&" last)} "Last >>"])])]))  
+          [:a {:href (str "/movies-popularity/" criteria "&" last)} "Last >>"])])]))  
 
 
 (defn- movies-layout 
@@ -91,28 +94,34 @@
          [:p "No matching data."]))
       [:div {:class "message"} "You must enter search criteria!"]))])
 
+(defn try-convert-string 
+  "Converts string to integer."
+  [str]
+  (try 
+  (Integer/valueOf str)
+  (catch Exception e (identity 0))))
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, duration and genre."
+  "Search by Movie title, release year, country, duration, genre and platform."
   [criteria]
   (cond 
-    (not-empty (search-by-year criteria movies-disney)) (search-by-year criteria movies-disney)
-    (not-empty (search-by-title criteria movies-disney)) (search-by-title criteria movies-disney)
-    (not-empty (search-by-country criteria movies-disney)) (search-by-country criteria movies-disney)
-    (not-empty (search-by-runtime criteria movies-disney)) (search-by-runtime criteria movies-disney)
-    (not-empty (search-by-genre criteria movies-disney)) (search-by-genre criteria movies-disney)
+    (not-empty (search-by-year criteria (popular-movies))) (search-by-year criteria (popular-movies))
+    (not-empty (search-by-title criteria (popular-movies))) (search-by-title criteria (popular-movies))
+    (not-empty (search-by-country criteria (popular-movies))) (search-by-country criteria (popular-movies))
+    (not-empty (search-by-runtime criteria (popular-movies))) (search-by-runtime criteria (popular-movies))
+    (not-empty (search-by-genre criteria (popular-movies))) (search-by-genre criteria (popular-movies))
     :else nil))
 
-(defn disney-page
-  "Show Movies Disney+ page depending on search criteria." 
+(defn movies-popularity-page
+  "Show Netflix-portfolio page depending on search criteria." 
   ([uri] (template-page 
-           "Movies Disney+" 
+           "Netflix portfolio" 
            uri 
-           (movies-layout movies-disney "all" 1)))
+           (movies-layout (popular-movies) "all" 1)))
   ([uri criteria page] (template-page 
-                         "Movies Disney+" 
+                         "Netflix portfolio" 
                          uri 
                          (movies-layout (if (= criteria "all")
-                                              movies-disney
+                                              (popular-movies)
                                              (get-data-by-search-criteria criteria)) 
                                            criteria page))))
