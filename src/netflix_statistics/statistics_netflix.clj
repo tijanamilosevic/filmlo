@@ -358,7 +358,7 @@ max-duration-tvshow;15 seasons
 (defn search-by-country 
   "Search Netflix portfolio by country." 
   [country] 
-  (filter #(= (:country %) (capitalize-words country)) 
+  (filter #(.contains (:country %) (capitalize-words country))
           netflix-portfolio))
 
 ;;;;;;;;search by number of seasons for tv shows
@@ -371,12 +371,11 @@ max-duration-tvshow;15 seasons
 ;;;;;;;;search by number of seasons for tv shows less than ...
 
 (defn substring-to-integer
-  "Converts first two letters from string to integer."
+  "Converts numbers from string to integer."
   [str]
   (try
     (Integer.
-     (re-find  #"\d+" 
-               (subs str 0 2)))
+     (re-find  #"\d+" str))
     (catch Exception e (identity 0))))
 
 (defn search-by-season-min 
@@ -395,4 +394,28 @@ max-duration-tvshow;15 seasons
               season) 
           tvshows))
 
+;;;;;;;;search by duration for movies
 
+(defn search-by-duration
+  "Search Movies by duration."
+  [duration] 
+  (filter #(= (:duration %) (str duration " min")) 
+          movies))
+
+;;;;;;;;search movies by duration less than ...
+
+(defn search-by-duartion-min 
+  "Search Movies by duration less than number forwarded."
+  [duration] 
+  (filter #(< (substring-to-integer (:duration %)) 
+              duration) 
+          movies))
+
+;;;;;;;;search movies by duration greater than ...
+
+(defn search-by-duration-max 
+  "Search Movies by duration greater than number forwarded."
+  [duration] 
+  (filter #(> (substring-to-integer (:duration %)) 
+              duration) 
+          movies))

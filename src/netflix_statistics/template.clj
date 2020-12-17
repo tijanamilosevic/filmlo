@@ -145,6 +145,9 @@
     (= uri "/netflix-portfolio") (portfolio-selected) 
     (= uri "/netflix-statistics") (netflix-stats-selected)
     (= uri "/movies")(movies-selected)
+    (= uri "/movies/hulu")(movies-selected)
+    (= uri "/movies/disney")(movies-selected)
+    (= uri "/movies/prime")(movies-selected)
     (= uri "/movies-stats")(movies-stats-selected)
     (= uri "/movies-popularity") (movies-popularity-selected)
     true (imdb-ranking-selected))) 
@@ -155,7 +158,9 @@
   [title uri content]
   (html 
     [:head
-     [:meta {:charset "UTF-8"}] 
+     [:meta {:charset "UTF-8"}]
+     [:link {:rel "stylesheet" 
+             :href "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"}] 
      [:title title]
      (include-css "/style.css")]
     [:body   

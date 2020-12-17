@@ -2,7 +2,7 @@
   (:require [template :refer [template-page]]
             [statistics-netflix :refer [netflix-portfolio search-by-year search-by-name
                                         search-by-country search-by-season search-by-type-tv-show
-                                        search-by-type-movie]]
+                                        search-by-type-movie search-by-duration]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 
@@ -14,7 +14,7 @@
    (form-to [:post "/netflix-portfolio"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie/TV Show title, release year, country, type (Movie/TV Show), number of seasons for TV Shows: "]]
+              [:th {:style "width: 400px;"} "Search by Movie/TV Show title, release year, country, type (Movie/TV Show), duration: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -48,23 +48,19 @@
                   [:td [:div (movie :duration)]]
                   [:td [:div (movie :country)]]])))]]])
 
-(list-portfolio netflix-portfolio)
-
 
 (defn- pagination
+  "Creates pagination part on page."
   [criteria page last]
-
   (if-not (= 0 last) 
     [:p
      (if-not (= 1 page)
        [:span
         [:a {:href (str "/netflix-portfolio/" criteria "&1")} "<< First"] " "
         (if-not (= 2 page)
-          [:a {:href (str "/netflix-portfolio/" criteria "&" (- page 1))} "< Previous"])])
-     
+          [:a {:href (str "/netflix-portfolio/" criteria "&" (- page 1))} "< Previous"])])  
      (if-not (= 1 last)
-       [:span " " [:b (str page " of " last " pages")] " "])
-     
+       [:span " " [:b (str page " of " last " pages")] " "])    
      (if-not (= last page)
        [:span
         [:a {:href (str "/netflix-portfolio/" criteria "&" (+ page 1))} "Next >"] " "
@@ -96,11 +92,9 @@
          [:p "No matching data."]))
       [:div {:class "message"} "You must enter search criteria!"]))])
 
-(if-not (or (= "cao" "") (clojure.string/blank? "  "))
-  (identity 1)
-  (identity 0))
-
-(defn try-convert-string [str]
+(defn try-convert-string 
+  "Converts string to integer."
+  [str]
   (try 
   (Integer/valueOf str)
   (catch Exception e (identity 0))))
@@ -114,10 +108,9 @@
     (not-empty (search-by-country criteria)) (search-by-country criteria)
     (not-empty (search-by-type-movie criteria)) (search-by-type-movie criteria)
     (not-empty (search-by-type-tv-show criteria)) (search-by-type-tv-show criteria)
+    (not-empty (search-by-duration criteria)) (search-by-duration criteria)
     (not-empty (search-by-season (try-convert-string criteria))) (search-by-season (try-convert-string criteria))
     :else nil))
-
-
 
 (defn netflix-portfolio-page
   "Show Netflix-portfolio page depending on search criteria." 
@@ -130,10 +123,5 @@
                          uri 
                          (portfolio-layout (if (= criteria "all")
                                               netflix-portfolio
-                                             (get-data-by-search-criteria criteria)) criteria page))))
-
-(netflix-portfolio-page "/netflix-portfolio" "" 1)
-
-
-
-
+                                             (get-data-by-search-criteria criteria)) 
+                                           criteria page))))

@@ -21,18 +21,28 @@ movies-years
 the-oldest-movie-year ;1902
 
 ;; the oldest movie/s is/are created in 1902
-(def get-the-oldest-movie (filter #(= (:Year %) the-oldest-movie-year) movies))
-get-the-oldest-movie ; only "A Trip to the Moon"
-(count get-the-oldest-movie) ; 1 movie
+(defn get-the-oldest-movie 
+  "Return the oldest movie."
+  []
+  (filter #(= (:Year %) the-oldest-movie-year) 
+          movies))
+
+(get-the-oldest-movie) ; only "A Trip to the Moon"
+(count (get-the-oldest-movie)) ; 1 movie
 
 ;; the newest movie/s
 (def the-newest-movie-year (apply max movies-years))
 the-newest-movie-year ;2020
 
 ;; the oldest movie/s is/are created in 1902
-(def get-the-newest-movie (filter #(= (:Year %) the-newest-movie-year) movies))
-get-the-newest-movie ; we have many movies in 2020
-(count get-the-newest-movie) ; 147 movies
+(defn get-the-newest-movie
+  "Returns the newest movie."
+ []
+  (filter #(= (:Year %) the-newest-movie-year) 
+          movies))
+
+(get-the-newest-movie) ; we have many movies in 2020
+(count (get-the-newest-movie)) ; 147 movies
 
 ;; so we have movies from 1902 to 2020 
 
@@ -48,21 +58,32 @@ get-the-newest-movie ; we have many movies in 2020
 (def movies-disney(filter #(= (:Disney+ %) 1) movies))
 (def count-disney (count movies-disney)) ; 564
 
-;; movies on Prime Video 
-(def count-prime (- num-movies count-netflix count-hulu count-disney)) ;; 11 717 movies on Prime Video
+;; movies on Prime Video
+(def movies-prime(filter #(and (not= (:Netflix %) 1) (not= (:Hulu %) 1) (not= (:Disney+ %) 1)) movies)) 
+(def count-prime (count movies-prime)) ;; 11 758 movies on Prime Video
 
 ;; average runtime(mean)
 
 ; check and count nil values
-(count (filter #(= (:Runtime %) "") movies)) ; 592 nil ("") values
+(defn count-nil-vaules
+ "Counts nil runtime values." 
+  [] 
+  (count (filter #(= (:Runtime %) "") 
+                 movies))) 
+(count-nil-vaules); 592 nil ("") values
+
 ; we do not need nil values, we choose movies WITH duration
 (def movies-no-nil (filter #(not= (:Runtime %) "") movies)) 
 
 (def runtimes (map :Runtime movies-no-nil))
-runtimes
-(type runtimes)
 
-(def average-runtime (double (/ (reduce + runtimes) (count movies-no-nil)))) ; 93.41
+(defn average-runtime 
+  "Returns average runtime."
+  []
+  (double 
+   (/ 
+    (reduce + runtimes) 
+    (count movies-no-nil)))) ; 93.41
 
 ;; I want to check movie deviation from mean, so we need variance and standard deviation
 
@@ -74,14 +95,17 @@ runtimes
   "A measure of how far a set of numbers is spread out."
   [data]
     (def sqr (fn [x] (* x x)))
-    (let [mv average-runtime]
+    (let [mv (average-runtime)]
       (/
         (reduce +
           (map
             #(sqr (- % mv)) data))
               (count data))))
 
-(def movies-variance (Math/round (variance runtimes))) ; variance is 796
+(defn movies-variance
+ "Returns movies runtime variance." 
+  []
+  (Math/round (variance runtimes))) ; variance is 796
 
 ;; 2) Standard deviation
 
@@ -94,14 +118,22 @@ runtimes
   [data]
   (Math/sqrt (variance data)))
 
-(def movies-standard-deviation (Math/round (standard-deviation runtimes))) ;; the average deviation of the duration of the films from the average value is 28
+(defn movies-standard-deviation
+ "Returns movies duration standard deviation." 
+  []
+  (Math/round (standard-deviation runtimes)))
+
+(movies-standard-deviation) ; the average deviation of the duration of the movies from the average value is 28
+
 
 ;;;;;;;;;;;; Mode ;;;;;;;;;;;;;;;
 
 ;; - which duration is most recurring, can be more than one value!
 
-(defn mode [coll]
-  (let [frequency-distribution (frequencies coll)
+(defn mode 
+  "Returns most frequent value in data."
+  [data]
+  (let [frequency-distribution (frequencies data)
         sorted (sort-by
                  (comp - second) frequency-distribution)
         mxfreq (second (first sorted))]
@@ -112,39 +144,105 @@ runtimes
 
 (def mode-duration (mode runtimes)); its 90
 mode-duration
+
 ;; we can see which movies have duration 90
-(def movies-mode-duration (filter #(= (:Runtime %) 90) movies)) 
-movies-mode-duration
-(count movies-mode-duration) ;971 movies
+(defn movies-mode-duration
+ "Returns movies with mode duration." 
+  []
+  (filter #(= (:Runtime %) (nth mode-duration 0)) 
+          movies)) 
+
+(movies-mode-duration)
+(count (movies-mode-duration)) ;971 movies
 
 ;; which language is most recurring:
 
 (def languages (map :Language movies))
-(mode languages) ; its English (only english)
+(def mode-language (mode languages)); its English (only english)
+
 ;; we can see which movies have language english
-(def movies-mode-language (filter #(= (:Language %) "English") movies)) 
-movies-mode-language
-(count movies-mode-language) ; 10 955 movies on English
+(defn movies-mode-language
+  "Returns movies with most recur language."
+  []
+  (filter #(= (:Language %) (nth mode-language 0)) 
+          movies)) 
+
+(movies-mode-language)
+(count (movies-mode-language)) ; 10 955 movies on English
 
 ;; which genre is most recurring:
 
 (def genres (map :Genres movies))
-(mode genres) ; its Drama (only Drama)
-;; we can see which movies have genre drama
-(def movies-mode-genre (filter #(= (:Genres %) "Drama") movies)) 
-movies-mode-genre
-(count movies-mode-genre) ; 1341 movie Drama
+(def mode-genre (mode genres)) ; its Drama (only Drama)
 
-;; which county is most recurring:
+;; we can see which movies have genre drama
+(defn movies-mode-genre
+ "Returns movies with most recur genre." 
+  []
+  (filter #(= (:Genres %) (nth mode-genre 0)) 
+          movies)) 
+
+(movies-mode-genre)
+(count (movies-mode-genre)) ; 1341 movie Drama
+
+;; which country is most recurring:
 
 (def countries (map :Country movies))
-(mode countries) ; its United States (only United States)
+(def mode-country (mode countries)); its United States (only United States)
+
 ;; we can see which movies have country United States
-(def movies-mode-country (filter #(= (:Country %) "United States") movies)) 
-movies-mode-country
-(count movies-mode-country) ; 8776 movie from United States
+(defn movies-mode-country
+  "Returns movies with most recur country." 
+  []
+  (filter #(= (:Country %) "United States") 
+          movies)) 
 
-  
+(movies-mode-country)
+(count (movies-mode-country)) ; 8776 movie from United States
 
+;; search all movies or specific platform  
+;; title, year, runtime, country, genre
 
+(defn capitalize-words 
+  "Capitalize every word in a string."
+  [s]
+  (->> (clojure.string/split (str s) #"\b") 
+       (map clojure.string/capitalize)
+       clojure.string/join))
 
+(defn search-by-title 
+  "Search movies by title."
+  [title movies-passed] 
+  (filter #(= (:Title %) (capitalize-words title)) 
+          movies-passed))
+
+(defn try-convert-string 
+  "Convert string to integer (if it is possible)."
+  [str]
+  (try 
+  (Integer/valueOf str)
+  (catch Exception e (identity 0))))
+
+(defn search-by-year
+ "Search movies by year." 
+  [year movies-passed] 
+  (filter #(= (:Year %) (try-convert-string year)) 
+          movies-passed))
+
+(defn search-by-runtime
+ "Search movies by runtime." 
+  [runtime movies-passed] 
+  (filter #(= (:Runtime %) (try-convert-string runtime)) 
+          movies-passed))
+
+(defn search-by-country
+ "Search movies by contry." 
+  [country movies-passed] 
+  (filter #(.contains (:Country %) (capitalize-words country)) 
+          movies-passed))
+
+(defn search-by-genre
+ "Search movies by genre." 
+  [genre movies-passed] 
+  (filter #(.contains (:Genres %) (capitalize-words genre)) 
+          movies-passed))
