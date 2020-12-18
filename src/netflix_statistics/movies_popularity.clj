@@ -2,7 +2,7 @@
   (:require [template :refer [template-page]]
             [movies-statistics :refer [search-by-genre search-by-country search-by-runtime
                                        search-by-year search-by-title]]
-            [popularity-prediction :refer [popular-movies]]
+            [popularity-prediction :refer [popular-platform-movies search-by-platform]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 
@@ -37,7 +37,8 @@
       [:th "Year"]
       [:th "Duration"]
       [:th "Country"]
-      [:th "IMDb Rating"]]
+      [:th "IMDb Rating"]
+      [:th "Platform"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
@@ -48,7 +49,8 @@
                   [:td [:div (movie :year)]]
                   [:td [:div (movie :runtime)]]
                   [:td [:div (movie :country)]]
-                  [:td [:div (movie :imdb)]]])))]]])
+                  [:td [:div (movie :imdb)]]
+                  [:td [:div (movie :platform)]]])))]]])
 
 
 (defn- pagination
@@ -105,11 +107,12 @@
   "Search by Movie title, release year, country, duration, genre and platform."
   [criteria]
   (cond 
-    (not-empty (search-by-year criteria (popular-movies))) (search-by-year criteria (popular-movies))
-    (not-empty (search-by-title criteria (popular-movies))) (search-by-title criteria (popular-movies))
-    (not-empty (search-by-country criteria (popular-movies))) (search-by-country criteria (popular-movies))
-    (not-empty (search-by-runtime criteria (popular-movies))) (search-by-runtime criteria (popular-movies))
-    (not-empty (search-by-genre criteria (popular-movies))) (search-by-genre criteria (popular-movies))
+    (not-empty (search-by-year criteria (popular-platform-movies))) (search-by-year criteria (popular-platform-movies))
+    (not-empty (search-by-title criteria (popular-platform-movies))) (search-by-title criteria (popular-platform-movies))
+    (not-empty (search-by-country criteria (popular-platform-movies))) (search-by-country criteria (popular-platform-movies))
+    (not-empty (search-by-runtime criteria (popular-platform-movies))) (search-by-runtime criteria (popular-platform-movies))
+    (not-empty (search-by-genre criteria (popular-platform-movies))) (search-by-genre criteria (popular-platform-movies))
+    (not-empty (search-by-platform criteria)) (search-by-platform criteria)
     :else nil))
 
 (defn movies-popularity-page
@@ -117,11 +120,11 @@
   ([uri] (template-page 
            "Netflix portfolio" 
            uri 
-           (movies-layout (popular-movies) "all" 1)))
+           (movies-layout (popular-platform-movies) "all" 1)))
   ([uri criteria page] (template-page 
                          "Netflix portfolio" 
                          uri 
                          (movies-layout (if (= criteria "all")
-                                              (popular-movies)
+                                              (popular-platform-movies)
                                              (get-data-by-search-criteria criteria)) 
                                            criteria page))))

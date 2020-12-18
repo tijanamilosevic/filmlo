@@ -3,7 +3,8 @@
             [ultra-csv.core :as csv]
             [clojure.set :as set]
             [clojure.string :refer [lower-case blank?]]
-            [kmeans-movies  :refer [bad-ranking-group average-ranking-group top-ranking-group]]))
+            [kmeans-movies  :refer [bad-ranking-group average-ranking-group top-ranking-group]]
+            [movies-statistics :refer [capitalize-words]]))
 
 ;; the popularity of movies depends on several factors
 ;; 1) streaming platform popularity
@@ -296,24 +297,62 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
   (filter #(= (:popularity %) "not popular") 
           movies-popularity))
 
+;; adding :platform key to popular movies
+
+(defn insert-platform [movie name] 
+  (assoc movie :platform name))
+
+(defn platform-name [netflix hulu disney]
+ (cond
+    (= netflix 1) "Netflix"
+    (= hulu 1) "Hulu"
+    (= disney 1) "Disney+"
+    true "Prime Video"))
+
+
+(def test-movies [{:netflix 1,
+                   :hulu 0,
+                   :disney+ 1,
+                   :prime-video 0
+                   },
+                  {:netflix 0,
+                   :hulu 1,
+                   :disney+ 0,
+                   :prime-video 0}])
+
+ (defn popular-platform-movies 
+   "Returns popular movies with new key :platform and its value."
+   []
+   (map #(insert-platform % (platform-name 
+                             (:netflix %) 
+                             (:hulu %)
+                             (:disney+ %))) 
+        (popular-movies)))
+
 ;;;;;;; working with popular movies
 
 (defn num-popular-movies
   "Counts popular movies. "
   []
-  (count (popular-movies)))
+  (count (popular-platform-movies)))
 
 (defn top-movies
   "Returns movies with highest score (8)"
   []
   (filter #(= (:score-final %) 8) 
-          (popular-movies)))
+          (popular-platform-movies)))
 
 (defn num-top-movies
   "Counts top movies. "
   []
-  (count (top-movies)))
+  (count (popular-platform-movies)))
 
+(defn search-by-platform 
+  "Search popular movies by platform."
+  [platform]
+  (filter #(.contains (:platform %) (capitalize-words platform))
+          (popular-platform-movies)))
+ 
 
 ;; writeing movies with popularity to scores.json file:
 (spit "resources/scores.json" (json/write-str movies-popularity))

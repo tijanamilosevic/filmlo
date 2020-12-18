@@ -7,7 +7,7 @@
   [movies]
   [:div.body
        [:h1 {:style "border-bottom: 1px solid #f3943b; padding: 10px;"} 
-        "FilmLo Web App- movies statistics and predictions, all in one place."]
+        "FilmLo- movies statistics and predictions, all in one place."]
    [:div {:style "float: right;"}
          [:p
           [:span (str (count movies)" top " "movies")]]]
@@ -17,23 +17,25 @@
     [:table {:frame "box"}
      [:tr
       [:th "No."]
-      [:th {:style "width: 50% !important;"} "Title"]
+      [:th {:style "width: 70% !important;"} "Title"]
       [:th "Genre"]
       [:th "Year"]
       [:th "Duration"]
-      [:th "Country"]
-      [:th "IMDb Rating"]]
+      [:th {:style "width: 30% !important;"}"Country"]
+      [:th "IMDb Rating"]
+      [:th "Platform"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
        (identity [:tr
                   [:td [:div (:no (swap! x update :no inc))]]
-                  [:td [:div.justy (movie :title)]]
-                  [:td [:div.justy (movie :genres)]]
+                  [:td [:div (movie :title)]]
+                  [:td [:div (movie :genres)]]
                   [:td [:div (movie :year)]]
                   [:td [:div (movie :runtime)]]
-                  [:td [:div.justy (movie :country)]]
-                  [:td [:div (movie :imdb)]]])))]]]])
+                  [:td [:div (movie :country)]]
+                  [:td [:div (movie :imdb)]]
+                  [:td [:div (movie :platform)]]])))]]]])
 
 (defn- movies-layout 
   "Show top list movies."

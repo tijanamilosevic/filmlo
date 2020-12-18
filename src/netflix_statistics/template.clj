@@ -19,7 +19,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 (defn- portfolio-selected 
   "Display main menu when Netflix portfolio is selected."
@@ -38,7 +38,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 (defn- netflix-stats-selected 
   "Display main menu when Netflix stats page is selected."
@@ -57,7 +57,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 (defn- movies-selected 
   "Display main menu when Movies page is selected."
@@ -76,7 +76,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]]) 
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]]) 
 
 (defn- movies-stats-selected 
   "Display main menu when Movie stats is selected."
@@ -95,7 +95,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 (defn- movies-popularity-selected 
   "Display main menu when Movie popularity is selected."
@@ -114,10 +114,10 @@
    [:li.selected
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 (defn- imdb-ranking-selected 
-  "Display main menu when iMDB ranking page is selected."
+  "Display main menu when IMDb ranking page is selected."
   []
   [:ul
    [:li
@@ -133,7 +133,7 @@
    [:li
     [:a {:href "/movies-popularity"} "Popular movies"]]
    [:li.selected
-    [:a {:href "/iMDB-ranking-groups"} "iMDB ranking"]]])
+    [:a {:href "/imdb-ranking-groups"} "IMDb ranking"]]])
 
 
 
