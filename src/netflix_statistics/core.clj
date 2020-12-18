@@ -13,7 +13,11 @@
             [hulu :refer [hulu-page]]
             [disney :refer [disney-page]]
             [prime :refer [prime-page]]
-            [movies-popularity :refer [movies-popularity-page]]))
+            [movies-popularity :refer [movies-popularity-page]]
+            [imdb-ranking :refer [imdb-ranking-page]]
+            [top-ranking :refer [top-page]]
+            [average-ranking :refer [average-page]]
+            [bad-ranking :refer [bad-page]]))
   
 (defroutes handler
   (GET "/" [] (index-page "/"))
@@ -47,6 +51,22 @@
         (movies-popularity-page "/movies-popularity" criteria 1))
   (GET "/movies-popularity/:criteria&:page" [criteria page]
       (movies-popularity-page "/movies-popularity" criteria (Integer/valueOf page)))
+  (GET "/imdb-ranking-groups" [] (imdb-ranking-page "/imdb-ranking-groups"))  
+  (GET "/imdb-ranking-groups/top" [] (top-page "/imdb-ranking-groups/top"))
+  (POST "/imdb-ranking-groups/top" [criteria] 
+        (top-page "/imdb-ranking-groups/top" criteria 1))
+  (GET "/imdb-ranking-groups/top/:criteria&:page" [criteria page]
+      (top-page "/imdb-ranking-groups/top" criteria (Integer/valueOf page))) 
+  (GET "/imdb-ranking-groups/average" [] (average-page "/imdb-ranking-groups/average"))
+  (POST "/imdb-ranking-groups/average" [criteria] 
+        (average-page "/imdb-ranking-groups/average" criteria 1))
+  (GET "/imdb-ranking-groups/average/:criteria&:page" [criteria page]
+      (average-page "/imdb-ranking-groups/top" criteria (Integer/valueOf page))) 
+  (GET "/imdb-ranking-groups/bad" [] (bad-page "/imdb-ranking-groups/bad"))
+  (POST "/imdb-ranking-groups/bad" [criteria] 
+        (bad-page "/imdb-ranking-groups/bad" criteria 1))
+  (GET "/imdb-ranking-groups/bad/:criteria&:page" [criteria page]
+      (bad-page "/imdb-ranking-groups/bad" criteria (Integer/valueOf page)))
   (route/resources "/")
   (route/not-found "404 Page not found"))
 

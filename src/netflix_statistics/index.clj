@@ -5,13 +5,13 @@
 (defn- top-list-movies
   "Show movies top list."
   [movies]
-  [:div.body
-       [:h1 {:style "border-bottom: 1px solid #f3943b; padding: 10px;"} 
+  [:div
+       [:h1 {:style "border-bottom: 1px solid #f3943b; padding: 10px; text-align: center;"} 
         "FilmLo- movies statistics and predictions, all in one place."]
-   [:div {:style "float: right;"}
+   [:div {:style "float: right; margin-top: 40px !important;"}
          [:p
           [:span (str (count movies)" top " "movies")]]]
-   [:div
+   [:div {:style "margin-top: 20px !important;"}
    [:h2 "Top list popular movies"]
    [:div.form
     [:table {:frame "box"}

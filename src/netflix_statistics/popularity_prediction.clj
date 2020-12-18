@@ -251,9 +251,23 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 (def all-scores (into zero-score-imdb-movies score-imdb-movies))
 
 ;; movies in these three groups (ranking by imdb)
-(def bad-ranking (filter #(= (:score-imdb %) 0) all-scores))
-(def average-ranking (filter #(= (:score-imdb %) 1) all-scores))
-(def top-ranking (filter #(= (:score-imdb %) 2) all-scores))
+(defn bad-ranking
+ "Returns movies in bad ranking group by IMDb (from list with IMDB value)." 
+  []
+  (filter #(= (:score-imdb %) 0) 
+          score-imdb-movies))
+
+(defn average-ranking
+ "Returns movies in average ranking group by IMDb." 
+  []
+  (filter #(= (:score-imdb %) 1) 
+          all-scores))
+ 
+(defn top-ranking
+ "Returns movies in top ranking group by IMDb." 
+  []
+  (filter #(= (:score-imdb %) 2) 
+          all-scores))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; final score calculation

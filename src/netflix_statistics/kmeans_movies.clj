@@ -61,7 +61,6 @@ ratings-mean ; mean is 5.9
 (def bad-ranking-group (groups 0)) ;; first group
 (def average-ranking-group (groups 5.9)) ;; second group
 (def top-ranking-group (groups 9.3)) ;; third group
-(type top-ranking-group)
 
 ;; movies in these groups: in popularity-prediction ns (top-ranking, average-ranking, bad-ranking)
 
@@ -82,3 +81,5 @@ ratings-mean ; mean is 5.9
 (def first-group-average (first groups-average)) 
 (def second-group-average (second groups-average))
 (def third-group-average (last groups-average))
+
+;; (in popularity-prediction namespace are listed movies in these trhee groups)
