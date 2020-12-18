@@ -6,8 +6,10 @@
   "Show movies top list."
   [movies]
   [:div
-       [:h1 {:style "border-bottom: 1px solid #f3943b; padding: 10px; text-align: center;"} 
-        "FilmLo- movies statistics and predictions, all in one place."]
+   [:h1 {:style " padding: 10px; text-align: center;"} 
+    "FilmLo- movies statistics and predictions, all in one place"]
+   [:h2 {:style "border-bottom: 1px solid #f3943b; padding: 10px; text-align: center; font-size: 25px;"} 
+    "Movies on Netflix, Hulu, Disney+ and Prime Video platform"]
    [:div {:style "float: right; margin-top: 40px !important;"}
          [:p
           [:span (str (count movies)" top " "movies")]]]

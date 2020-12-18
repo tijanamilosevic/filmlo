@@ -17,7 +17,8 @@
             [imdb-ranking :refer [imdb-ranking-page]]
             [top-ranking :refer [top-page]]
             [average-ranking :refer [average-page]]
-            [bad-ranking :refer [bad-page]]))
+            [bad-ranking :refer [bad-page]]
+            [movies-stats :refer [movies-stats-page]]))
   
 (defroutes handler
   (GET "/" [] (index-page "/"))
@@ -67,6 +68,8 @@
         (bad-page "/imdb-ranking-groups/bad" criteria 1))
   (GET "/imdb-ranking-groups/bad/:criteria&:page" [criteria page]
       (bad-page "/imdb-ranking-groups/bad" criteria (Integer/valueOf page)))
+  (GET "/movies-stats" [] (movies-stats-page "/movies-stats"))
+  
   (route/resources "/")
   (route/not-found "404 Page not found"))
 

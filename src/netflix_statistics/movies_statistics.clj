@@ -97,10 +97,181 @@ the-newest-movie-year ;2020
 (defn average-runtime 
   "Returns average runtime."
   []
-  (double 
-   (/ 
-    (reduce + runtimes) 
-    (count movies-no-nil)))) ; 93.41
+  (Math/round (double 
+                 (/ 
+                  (reduce + runtimes) 
+                  (count movies-no-nil))))) ; 93.41, rounded: 93
+
+;; average runtime Netflix:
+(def netflix-no-nil (filter #(not= (:runtime %) "") movies-netflix)) 
+
+(def netflix-runtimes (map :runtime netflix-no-nil))
+
+(defn netflix-average-runtime 
+  "Returns Netflix average runtime."
+  []
+  (Math/round (double 
+                 (/ 
+                  (reduce + netflix-runtimes) 
+                  (count netflix-no-nil))))) 
+
+;;Average runtime Hulu:
+(def hulu-no-nil (filter #(not= (:runtime %) "") movies-hulu)) 
+
+(def hulu-runtimes (map :runtime hulu-no-nil))
+
+(defn hulu-average-runtime 
+  "Returns Hulu average runtime."
+  []
+  (Math/round (double 
+                 (/ 
+                  (reduce + hulu-runtimes) 
+                  (count hulu-no-nil))))) 
+
+;;Average runtime Disney+:
+(def disney-no-nil (filter #(not= (:runtime %) "") movies-disney)) 
+
+(def disney-runtimes (map :runtime disney-no-nil))
+
+(defn disney-average-runtime 
+  "Returns Disney+ average runtime."
+  []
+  (Math/round (double 
+                 (/ 
+                  (reduce + disney-runtimes) 
+                  (count disney-no-nil))))) 
+
+;;Average runtime Prime Video:
+(def prime-no-nil (filter #(not= (:runtime %) "") movies-prime)) 
+
+(def prime-runtimes (map :runtime prime-no-nil))
+
+(defn prime-average-runtime 
+  "Returns Prime Video average runtime."
+  []
+  (Math/round (double 
+                 (/ 
+                  (reduce + prime-runtimes) 
+                  (count prime-no-nil)))))
+
+
+
+(defn max-duration
+ "Returns max duration" 
+  [runtimes]
+  (apply max runtimes))
+
+(defn min-duration
+ "Returns min duration" 
+  [runtimes]
+  (apply min runtimes))
+
+(def max-duration-movies (max-duration runtimes))
+(def min-duration-movies (min-duration runtimes))
+
+(def max-duration-netflix (max-duration netflix-runtimes))
+(def min-duration-netflix (min-duration netflix-runtimes))
+
+(def max-duration-hulu (max-duration hulu-runtimes))
+(def min-duration-hulu (min-duration hulu-runtimes))
+
+(def max-duration-disney (max-duration disney-runtimes))
+(def min-duration-disney (min-duration disney-runtimes))
+
+(def max-duration-prime (max-duration prime-runtimes))
+(def min-duration-prime (min-duration prime-runtimes))
+
+
+;; Average, max, min IMDb rate:
+
+(defn no-nil
+  "Returns movies with no nil values from movies for specific column."
+  [movies column]
+  (filter #(not= (column %) "") 
+          movies))
+
+(defn get-values
+  "Returns values from no nil movies for specific column."
+  [no-nil-movies column]
+  (map column no-nil-movies))
+
+(defn average
+  "Returns average for specific column and movies."
+  [no-nil-movies column-values]
+ (double 
+  (/ 
+   (reduce + column-values) 
+   (count no-nil-movies))))
+
+(defn try-convert-string 
+  "Convert string to integer (if it is possible)."
+  [str]
+  (try 
+  (Integer/valueOf str)
+  (catch Exception e (identity 0))))
+
+(defn try-convert-string-double 
+  "Convert string to double (if it is possible)."
+  [str]
+  (try 
+  (Double/valueOf str)
+  (catch Exception e (identity 0))))
+
+(defn one-decimal
+  "Round number to one decimal place."
+  [value]
+  (try-convert-string-double (format "%.1f" value)))
+
+(defn average-imdb
+  "Returns average imdb."
+  []
+  (one-decimal
+   (average
+   (no-nil movies :imdb)
+   (get-values 
+    (no-nil movies :imdb) 
+    :imdb))))
+
+(defn average-imdb-netflix
+  "Returns average imdb for Netflix movies."
+  []
+  (one-decimal
+   (average
+   (no-nil movies-netflix :imdb)
+   (get-values 
+    (no-nil movies-netflix :imdb) 
+    :imdb))))
+
+(defn average-imdb-hulu
+  "Returns average imdb for Hulu movies."
+  []
+  (one-decimal
+   (average
+   (no-nil movies-hulu :imdb)
+   (get-values 
+    (no-nil movies-hulu :imdb) 
+    :imdb))))
+
+(defn average-imdb-disney
+  "Returns average imdb dor Disney+ movies."
+  []
+  (one-decimal
+   (average
+   (no-nil movies-disney :imdb)
+   (get-values 
+    (no-nil movies-disney :imdb) 
+    :imdb))))
+
+(defn average-imdb-prime
+  "Returns average imdb for Prime Video movies."
+  []
+  (one-decimal
+   (average
+   (no-nil movies-prime :imdb)
+   (get-values 
+    (no-nil movies-prime :imdb) 
+    :imdb))))
+
 
 ;; I want to check movie deviation from mean, so we need variance and standard deviation
 
@@ -233,12 +404,6 @@ mode-duration
   (filter #(= (:title %) (capitalize-words title)) 
           movies-passed))
 
-(defn try-convert-string 
-  "Convert string to integer (if it is possible)."
-  [str]
-  (try 
-  (Integer/valueOf str)
-  (catch Exception e (identity 0))))
 
 (defn search-by-year
  "Search movies by year." 

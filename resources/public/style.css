@@ -7,6 +7,16 @@ body {
 	padding: 0;
 }
 
+.statistics {
+	width: 400px !important; 
+	color: #b9b9b9 !important; 
+	font-family: 'Forum-Regular' !important; 
+    font-size: 18px !important;
+	font-weight: normal !important;
+	margin-top: 20px !important;
+	margin-left: 20px !important;
+}
+
 .justy {
 	text-align: justify !important;
 	text-justify: inter-word !important;
