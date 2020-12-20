@@ -1,7 +1,7 @@
 (ns movies-popularity
   (:require [template :refer [template-page]]
             [movies-statistics :refer [search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title search-by-imdb]]
+                                       search-by-year search-by-title search-by-imdb search-by-language]]
             [popularity-prediction :refer [popular-platform-movies search-by-platform]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
@@ -14,7 +14,7 @@
    (form-to [:post "/movies-popularity"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration, genre and platform: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, language, duration, genre and platform: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -38,6 +38,8 @@
       [:th "Duration"]
       [:th "Country"]
       [:th "IMDb Rating"]
+      [:th "Language"]
+      [:th "Rotten Tomatoes"]
       [:th "Platform"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
@@ -50,6 +52,8 @@
                   [:td [:div (movie :runtime)]]
                   [:td [:div (movie :country)]]
                   [:td [:div (movie :imdb)]]
+                  [:td [:div (movie :language)]]
+                  [:td [:div (movie :rotten-tomatoes)]]
                   [:td [:div (movie :platform)]]])))]]])
 
 
@@ -104,7 +108,7 @@
   (catch Exception e (identity 0))))
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, IMDb rating, duration, genre and platform."
+  "Search by Movie title, release year, country, IMDb rating, languages, duration, genre and platform."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria (popular-platform-movies))) (search-by-year criteria (popular-platform-movies))
@@ -112,6 +116,7 @@
     (not-empty (search-by-country criteria (popular-platform-movies))) (search-by-country criteria (popular-platform-movies))
     (not-empty (search-by-genre criteria (popular-platform-movies))) (search-by-genre criteria (popular-platform-movies))
     (not-empty (search-by-platform criteria)) (search-by-platform criteria)
+    (not-empty (search-by-language criteria (popular-platform-movies))) (search-by-language criteria (popular-platform-movies))
     (not-empty (search-by-imdb criteria (popular-platform-movies))) (search-by-imdb criteria (popular-platform-movies))
     (not-empty (search-by-runtime criteria (popular-platform-movies))) (search-by-runtime criteria (popular-platform-movies))
     :else nil))

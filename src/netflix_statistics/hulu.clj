@@ -1,7 +1,7 @@
 (ns hulu
   (:require [template :refer [template-page]]
             [movies-statistics :refer [movies-hulu search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title search-by-imdb]]
+                                       search-by-year search-by-title search-by-imdb search-by-language]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 (defn- movie-search-box 
@@ -12,7 +12,7 @@
    (form-to [:post "/movies/hulu"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, language, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -34,7 +34,9 @@
       [:th "Year"]
       [:th "Duration"]
       [:th "Country"]
-      [:th "IMDb Rating"]]
+      [:th "IMDb Rating"]
+      [:th "Language"]
+      [:th "Rotten Tomatoes"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
@@ -45,7 +47,9 @@
                   [:td [:div (movie :year)]]
                   [:td [:div (movie :runtime)]]
                   [:td [:div (movie :country)]]
-                  [:td [:div (movie :imdb)]]])))]]])
+                  [:td [:div (movie :imdb)]]
+                  [:td [:div (movie :language)]]
+                  [:td [:div (movie :rotten-tomatoes)]]])))]]])
 
 
 (defn- pagination
@@ -100,6 +104,7 @@
     (not-empty (search-by-title criteria movies-hulu)) (search-by-title criteria movies-hulu)
     (not-empty (search-by-country criteria movies-hulu)) (search-by-country criteria movies-hulu)
     (not-empty (search-by-genre criteria movies-hulu)) (search-by-genre criteria movies-hulu)
+    (not-empty (search-by-language criteria movies-hulu)) (search-by-language criteria movies-hulu)
     (not-empty (search-by-imdb criteria movies-hulu)) (search-by-imdb criteria movies-hulu)
     (not-empty (search-by-runtime criteria movies-hulu)) (search-by-runtime criteria movies-hulu)
     :else nil))

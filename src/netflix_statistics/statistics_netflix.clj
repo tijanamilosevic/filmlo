@@ -1,5 +1,6 @@
 (ns statistics-netflix
-  (:require [clojure.data.json :as json]))
+  (:require [clojure.data.json :as json]
+            [movies-statistics :refer [no-nil get-values min-value max-value]]))
 
 ; load data from json file
 
@@ -154,6 +155,53 @@ max-duration-tvshow;15 seasons
 
 (tvshows-duration-average) ; average is 2 seasons
 
+;;;;;;;;;; the newest/oldest movie(s)
+
+(defn min-year-movies
+ "Returns min year for movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies :release_year)
+    :release_year)))
+
+(defn the-oldest-movies
+  "Returns the oldest movies."
+  []
+  (filter #(= (:release_year %) (min-year-movies)) 
+          movies))
+
+(defn max-year-movies
+ "Returns max year for movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies :release_year)
+    :release_year)))
+
+;;;;;;;;;; the newest/oldest tv-show(s)
+
+(defn min-year-tvshow
+ "Returns min year for tvshows." 
+  []
+  (min-value
+   (get-values 
+    (no-nil tvshows :release_year)
+    :release_year)))
+
+(defn the-oldest-tvshows
+  "Returns the oldest tvshows."
+  []
+  (filter #(= (:release_year %) (min-year-tvshow)) 
+          tvshows))
+
+(defn max-year-tvshows
+ "Returns max year for tvshows." 
+  []
+  (max-value
+   (get-values 
+    (no-nil tvshows :release_year)
+    :release_year)))
 ;;;;;;;;;;;;;;;;;;top country/countries
 
 (def countries (map :country netflix-portfolio))
@@ -365,9 +413,11 @@ max-duration-tvshow;15 seasons
 (defn search-by-season 
   "Search TV Shows by season number."
   [season] 
-  (filter #(= (:duration %) (str season " Seasons")) 
-          tvshows))
-
+  (filter #(= (:duration %) (if (= season 1)
+                              (str season " Season")
+                              (str season " Seasons"))) 
+           tvshows))
+(search-by-season 15)
 ;;;;;;;;search by number of seasons for tv shows less than ...
 
 (defn substring-to-integer

@@ -18,7 +18,8 @@
             [top-ranking :refer [top-page]]
             [average-ranking :refer [average-page]]
             [bad-ranking :refer [bad-page]]
-            [movies-stats :refer [movies-stats-page]]))
+            [movies-stats :refer [movies-stats-page]]
+            [netflix-stats :refer [netflix-stats-page]]))
   
 (defroutes handler
   (GET "/" [] (index-page "/"))
@@ -69,7 +70,7 @@
   (GET "/imdb-ranking-groups/bad/:criteria&:page" [criteria page]
       (bad-page "/imdb-ranking-groups/bad" criteria (Integer/valueOf page)))
   (GET "/movies-stats" [] (movies-stats-page "/movies-stats"))
-  
+  (GET "/netflix-statistics" [] (netflix-stats-page "/netflix-statistics"))
   (route/resources "/")
   (route/not-found "404 Page not found"))
 

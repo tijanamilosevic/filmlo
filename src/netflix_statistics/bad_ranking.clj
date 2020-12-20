@@ -1,7 +1,8 @@
 (ns bad-ranking
   (:require [template :refer [template-page]]
             [movies-statistics :refer [search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title search-by-imdb]]
+                                       search-by-year search-by-title search-by-imdb
+                                       search-by-language]]
             [popularity-prediction :refer [bad-ranking]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
@@ -13,7 +14,7 @@
    (form-to [:post "/imdb-ranking-groups/bad"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, language, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -36,7 +37,9 @@
       [:th "Year"]
       [:th "Duration"]
       [:th "Country"]
-      [:th "IMDb Rating"]]
+      [:th "IMDb Rating"]
+      [:th "Language"]
+      [:th "Rotten Tomatoes"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
@@ -47,7 +50,9 @@
                   [:td [:div (movie :year)]]
                   [:td [:div (movie :runtime)]]
                   [:td [:div (movie :country)]]
-                  [:td [:div (movie :imdb)]]])))]]])
+                  [:td [:div (movie :imdb)]]
+                  [:td [:div (movie :language)]]
+                  [:td [:div (movie :rotten-tomatoes)]]])))]]])
 
 
 (defn- pagination
@@ -95,13 +100,14 @@
 
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, IMDb rating, duration and genre."
+  "Search by Movie title, release year, country, IMDb rating, language, duration and genre."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria (bad-ranking))) (search-by-year criteria (bad-ranking))
     (not-empty (search-by-title criteria (bad-ranking))) (search-by-title criteria (bad-ranking))
     (not-empty (search-by-country criteria (bad-ranking))) (search-by-country criteria (bad-ranking))
     (not-empty (search-by-genre criteria (bad-ranking))) (search-by-genre criteria (bad-ranking))
+    (not-empty (search-by-language criteria (bad-ranking))) (search-by-language criteria (bad-ranking))
     (not-empty (search-by-imdb criteria (bad-ranking))) (search-by-imdb criteria (bad-ranking))
     (not-empty (search-by-runtime criteria (bad-ranking))) (search-by-runtime criteria (bad-ranking))
     :else nil))

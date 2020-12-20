@@ -108,8 +108,8 @@
     (not-empty (search-by-country criteria)) (search-by-country criteria)
     (not-empty (search-by-type-movie criteria)) (search-by-type-movie criteria)
     (not-empty (search-by-type-tv-show criteria)) (search-by-type-tv-show criteria)
-    (not-empty (search-by-duration criteria)) (search-by-duration criteria)
     (not-empty (search-by-season (try-convert-string criteria))) (search-by-season (try-convert-string criteria))
+    (not-empty (search-by-duration criteria)) (search-by-duration criteria)
     :else nil))
 
 (defn netflix-portfolio-page

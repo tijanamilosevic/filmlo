@@ -19,14 +19,14 @@
                                        min-imdb-netflix max-imdb-netflix
                                        min-imdb-movies max-imdb-movies
                                        mode-imdb mode-country mode-genre
-                                       mode-language mode-duration]]))
+                                       mode-language mode-duration imdb-standard-deviation]]))
 
 
 (defn- statistics-one 
   "Show total count movies and the oldest movie(s)."
   []
   [:div.movie
-   [:h2 "Statistics for movies from Netflix, Hulu, Disney+ and prime video."]
+   [:h2 "Statistics for movies from Netflix, Hulu, Disney+ and Prime Video"]
    [:h2 {:style "margin-top: 20px; font-size: 25px; color:#ff9600; "} "Total count"]
    [:div {:style "width: 400px !important; 
 	              color: #b9b9b9 !important; 
@@ -180,9 +180,9 @@
       [:th "Max IMDb"]
       [:th "Min IMDb"] ]
        (identity [:tr
-                  [:td [:div (str 1 " min")]]
-                  [:td [:div (str (max-imdb-movies) " min")]]
-                  [:td [:div (str (min-imdb-movies) " min")]]])]]])
+                  [:td [:div (imdb-standard-deviation)]]
+                  [:td [:div (max-imdb-movies)]]
+                  [:td [:div (min-imdb-movies)]]])]]])
 
 (defn- statistics-three 
   "Show max/min imdb movies links."
@@ -261,11 +261,11 @@
       [:th "Country"]
       [:th "IMDb"]]
        [:tr
-        [:td [:div (mode-duration)]]
-        [:td [:div (mode-language)]]
-        [:td [:div (mode-genre)]]
-        [:td [:div (mode-country)]]
-        [:td [:div (mode-imdb)]]]
+        [:td [:div (str (nth (mode-duration) 0) " min")]]
+        [:td [:div (nth (mode-language) 0)]]
+        [:td [:div (nth (mode-genre) 0)]]
+        [:td [:div (nth (mode-country) 0)]]
+        [:td [:div (nth (mode-imdb) 0)]]]
      [:tr
         [:td 
          [:div 

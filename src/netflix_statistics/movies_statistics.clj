@@ -271,6 +271,19 @@ the-newest-movie-year ;2020
   (Double/valueOf str)
   (catch Exception e (identity 0))))
 
+(defn try-convert-string-string 
+  "Convert string to integer (if it is possible), if not possible returns string."
+  [str]
+  (try 
+  (Integer/valueOf str)
+  (catch Exception e (identity "any text"))))
+
+(defn try-convert-string-double-string
+  "Convert string to double (if it is possible),  if not possible returns string."
+  [str]
+  (try 
+  (Double/valueOf str)
+  (catch Exception e (identity "any text"))))
 
 (defn one-decimal
   "Round number to one decimal place."
@@ -419,9 +432,9 @@ the-newest-movie-year ;2020
 
 (defn variance 
   "A measure of how far a set of numbers is spread out."
-  [data]
+  [data average-data]
     (def sqr (fn [x] (* x x)))
-    (let [mv (average-runtime)]
+    (let [mv (average-data)]
       (/
         (reduce +
           (map
@@ -436,7 +449,8 @@ the-newest-movie-year ;2020
     (variance 
      (get-values 
       (no-nil movies :runtime) 
-      :runtime)))))
+      :runtime)
+     average-runtime))))
 (movies-variance); variance is 796
 
 ;; 2) Standard deviation
@@ -447,8 +461,8 @@ the-newest-movie-year ;2020
    A low standard deviation indicates that the data points tend to be very close to the mean,
    whereas high standard deviation indicates that the data points are spread out over a large
    range of values."
-  [data]
-  (Math/sqrt (variance data)))
+  [data average-data]
+  (Math/sqrt (variance data average-data)))
 
 (defn movies-standard-deviation
  "Returns movies duration standard deviation." 
@@ -458,10 +472,21 @@ the-newest-movie-year ;2020
     (standard-deviation 
      (get-values 
       (no-nil movies :runtime) 
-      :runtime)))))
+      :runtime)
+     average-runtime))))
 
 (movies-standard-deviation) ; the average deviation of the duration of the movies from the average value is 28
 
+(defn imdb-standard-deviation
+ "Returns movies IMDb standard deviation." 
+  []
+  (one-decimal
+   (double 
+    (standard-deviation 
+     (get-values 
+      (no-nil movies :imdb) 
+      :imdb)
+     average-imdb))))
 
 ;;;;;;;;;;;; Mode ;;;;;;;;;;;;;;;
 
@@ -562,6 +587,13 @@ the-newest-movie-year ;2020
   (filter #(.contains (:country %) (capitalize-words country)) 
           movies-passed))
 
+(defn check-contains
+  "Check if column contains value if value is not integer."
+  [column value]
+  (if (= (integer? (try-convert-string-string value)) true)
+    (.contains column "any text")
+    (.contains column value)))
+
 (defn search-by-genre
  "Search movies by genre." 
   [genre movies-passed] 
@@ -572,6 +604,13 @@ the-newest-movie-year ;2020
  "Search movies by IMDb rating." 
   [imdb movies-passed] 
   (filter #(= (:imdb %) (if (< (count imdb)  3) 
-                          (try-convert-string imdb) 
-                          (try-convert-string-double imdb))) 
+                          (try-convert-string-string imdb) 
+                          (try-convert-string-double-string imdb))) 
           movies-passed))
+
+(defn search-by-language
+ "Search movies by language." 
+  [language movies-passed] 
+  (filter #(check-contains (:language %) (capitalize-words language)) 
+          movies-passed))
+
