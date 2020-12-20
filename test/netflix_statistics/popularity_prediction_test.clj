@@ -1,8 +1,9 @@
 (ns popularity-prediction-test
   (:require [midje.sweet :refer [=> facts]]
             [clojure.test :refer :all]
-            [popularity-prediction :refer [to-keyword keywordise insert-score to-int zero score-to-category
-                                           contains directors-points contains-imdb imdb-score sum popularity]]))
+            [popularity-prediction :refer [to-keyword keywordise to-int zero score-to-category
+                                           contains directors-points contains-imdb imdb-score sum popularity
+                                           platform-name insert-score-platform]]))
 
 
 (facts "Modified string to key value( one string => :one-string)"
@@ -11,23 +12,47 @@
   (to-keyword "Some text TeXT")
      => :some-text-text)
 
-(def movies-fake [{"Name" "Neki 1"
+(def movies-fake [{"Name" "Movie 1"
                    "IMDB rating" 9.1
                   }
-                  {"Name" "Neki 2"
+                  {"Name" "Movie 2"
                    "IMDB rating" 8.5}])
 
-(def movies-expected [{:name "Neki 1"
+(def movies-expected [{:name "Movie 1"
                        :imdb-rating 9.1
                       }
-                      {:name "Neki 2"
+                      {:name "Movie 2"
                        :imdb-rating 8.5}])
+(def movie {:title "Movie 1"
+             :runtime 120
+             :language "English, French"
+             :genres "Comedy, Action"
+             :imdb 5.9
+             :year 2019
+             :country "United States, France"})
 
-(def movies-not-expected [{:Name "Neki 1"
-                          :IMDB-rating 9.1
-                          }
-                          {:Name "Neki 2"
-                          :IMDB-rating 8.5}])
+(def movie-expected {:title "Movie 1"
+                      :runtime 120
+                      :language "English, French"
+                      :genres "Comedy, Action"
+                      :imdb 5.9
+                      :year 2019
+                      :country "United States, France"
+                      :score-platform 1})
+
+(facts "Insert score platform in movie"
+       (insert-score-platform movie 1)
+       => movie-expected)
+
+(facts "Returns platform name."
+       (platform-name 1 0 0)
+       => "Netflix"
+       (platform-name 0 1 0)
+       => "Hulu"
+       (platform-name 0 0 1)
+       => "Disney+"
+       (platform-name 0 0 0)
+       => "Prime Video")
 
 (facts "Applying to-keyword function to vector"
   (keywordise movies-fake)
@@ -36,22 +61,6 @@
      => ()
    (keywordise [])
      => ())
-
-
-(def movie-fake {:name "Neki 1"
-                  :imdb-rating 9.1})
-
-(def movie-expected {:name "Neki 1"
-                      :imdb-rating 9.1
-                      :score 1})
-
-(facts "Inserting :score in movie"
-  (insert-score movie-fake 1)
-     => movie-expected
-   (insert-score nil 1)
-     => {:score 1}
-   (insert-score {} 1)
-     => {:score 1})
 
 (facts "Returns number from string"
   (to-int "25%")

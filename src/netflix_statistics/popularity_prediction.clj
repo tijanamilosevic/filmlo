@@ -66,9 +66,6 @@
 ;; and Disney (0 points).
 
 
-;; (defn insert-score [movie points] 
-;;   (assoc movie :score points))
-
 (defn insert-score-platform
   "Insert platform score keyvalue to one movie." 
   [movie points] 
@@ -323,16 +320,6 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
     (= disney 1) "Disney+"
     true "Prime Video"))
 
-
-(def test-movies [{:netflix 1,
-                   :hulu 0,
-                   :disney+ 1,
-                   :prime-video 0
-                   },
-                  {:netflix 0,
-                   :hulu 1,
-                   :disney+ 0,
-                   :prime-video 0}])
 
  (defn popular-platform-movies 
    "Returns popular movies with new key :platform and its value."
