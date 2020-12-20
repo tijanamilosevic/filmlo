@@ -1,7 +1,7 @@
 (ns prime
   (:require [template :refer [template-page]]
             [movies-statistics :refer [movies-prime search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title]]
+                                       search-by-year search-by-title search-by-imdb]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 (defn- movie-search-box 
@@ -12,7 +12,7 @@
    (form-to [:post "/movies/prime"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -94,14 +94,15 @@
 
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, duration and genre."
+  "Search by Movie title, release year, country, IMDb rating, duration and genre."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria movies-prime)) (search-by-year criteria movies-prime)
     (not-empty (search-by-title criteria movies-prime)) (search-by-title criteria movies-prime)
     (not-empty (search-by-country criteria movies-prime)) (search-by-country criteria movies-prime)
-    (not-empty (search-by-runtime criteria movies-prime)) (search-by-runtime criteria movies-prime)
     (not-empty (search-by-genre criteria movies-prime)) (search-by-genre criteria movies-prime)
+    (not-empty (search-by-imdb criteria movies-prime)) (search-by-imdb criteria movies-prime)
+    (not-empty (search-by-runtime criteria movies-prime)) (search-by-runtime criteria movies-prime)  
     :else nil))
 
 (defn prime-page

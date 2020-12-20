@@ -1,7 +1,7 @@
 (ns disney
   (:require [template :refer [template-page]]
             [movies-statistics :refer [movies-disney search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title]]
+                                       search-by-year search-by-title search-by-imdb]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 (defn- movie-search-box 
@@ -12,7 +12,7 @@
    (form-to [:post "/movies/disney"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDBb rating, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -93,14 +93,15 @@
 
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, duration and genre."
+  "Search by Movie title, release year, country, IMDB rating, duration and genre."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria movies-disney)) (search-by-year criteria movies-disney)
     (not-empty (search-by-title criteria movies-disney)) (search-by-title criteria movies-disney)
     (not-empty (search-by-country criteria movies-disney)) (search-by-country criteria movies-disney)
-    (not-empty (search-by-runtime criteria movies-disney)) (search-by-runtime criteria movies-disney)
     (not-empty (search-by-genre criteria movies-disney)) (search-by-genre criteria movies-disney)
+    (not-empty (search-by-imdb criteria movies-disney)) (search-by-imdb criteria movies-disney)
+    (not-empty (search-by-runtime criteria movies-disney)) (search-by-runtime criteria movies-disney)
     :else nil))
 
 (defn disney-page

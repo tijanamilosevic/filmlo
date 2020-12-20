@@ -1,7 +1,7 @@
 (ns top-ranking
   (:require [template :refer [template-page]]
             [movies-statistics :refer [search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title]]
+                                       search-by-year search-by-title search-by-imdb]]
             [popularity-prediction :refer [top-ranking]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
@@ -13,7 +13,7 @@
    (form-to [:post "/imdb-ranking-groups/top"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -95,14 +95,15 @@
 
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, duration and genre."
+  "Search by Movie title, release year, country, IMDb rating, duration and genre."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria (top-ranking))) (search-by-year criteria (top-ranking))
     (not-empty (search-by-title criteria (top-ranking))) (search-by-title criteria (top-ranking))
     (not-empty (search-by-country criteria (top-ranking))) (search-by-country criteria (top-ranking))
-    (not-empty (search-by-runtime criteria (top-ranking))) (search-by-runtime criteria (top-ranking))
     (not-empty (search-by-genre criteria (top-ranking))) (search-by-genre criteria (top-ranking))
+    (not-empty (search-by-imdb criteria (top-ranking))) (search-by-imdb criteria (top-ranking))
+    (not-empty (search-by-runtime criteria (top-ranking))) (search-by-runtime criteria (top-ranking))
     :else nil))
 
 (defn top-page

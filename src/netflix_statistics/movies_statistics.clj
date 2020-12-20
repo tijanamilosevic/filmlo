@@ -90,100 +90,6 @@ the-newest-movie-year ;2020
 (count-nil-vaules); 592 nil ("") values
 
 ; we do not need nil values, we choose movies WITH duration
-(def movies-no-nil (filter #(not= (:runtime %) "") movies)) 
-
-(def runtimes (map :runtime movies-no-nil))
-
-(defn average-runtime 
-  "Returns average runtime."
-  []
-  (Math/round (double 
-                 (/ 
-                  (reduce + runtimes) 
-                  (count movies-no-nil))))) ; 93.41, rounded: 93
-
-;; average runtime Netflix:
-(def netflix-no-nil (filter #(not= (:runtime %) "") movies-netflix)) 
-
-(def netflix-runtimes (map :runtime netflix-no-nil))
-
-(defn netflix-average-runtime 
-  "Returns Netflix average runtime."
-  []
-  (Math/round (double 
-                 (/ 
-                  (reduce + netflix-runtimes) 
-                  (count netflix-no-nil))))) 
-
-;;Average runtime Hulu:
-(def hulu-no-nil (filter #(not= (:runtime %) "") movies-hulu)) 
-
-(def hulu-runtimes (map :runtime hulu-no-nil))
-
-(defn hulu-average-runtime 
-  "Returns Hulu average runtime."
-  []
-  (Math/round (double 
-                 (/ 
-                  (reduce + hulu-runtimes) 
-                  (count hulu-no-nil))))) 
-
-;;Average runtime Disney+:
-(def disney-no-nil (filter #(not= (:runtime %) "") movies-disney)) 
-
-(def disney-runtimes (map :runtime disney-no-nil))
-
-(defn disney-average-runtime 
-  "Returns Disney+ average runtime."
-  []
-  (Math/round (double 
-                 (/ 
-                  (reduce + disney-runtimes) 
-                  (count disney-no-nil))))) 
-
-;;Average runtime Prime Video:
-(def prime-no-nil (filter #(not= (:runtime %) "") movies-prime)) 
-
-(def prime-runtimes (map :runtime prime-no-nil))
-
-(defn prime-average-runtime 
-  "Returns Prime Video average runtime."
-  []
-  (Math/round (double 
-                 (/ 
-                  (reduce + prime-runtimes) 
-                  (count prime-no-nil)))))
-
-
-
-(defn max-duration
- "Returns max duration" 
-  [runtimes]
-  (apply max runtimes))
-
-(defn min-duration
- "Returns min duration" 
-  [runtimes]
-  (apply min runtimes))
-
-(def max-duration-movies (max-duration runtimes))
-(def min-duration-movies (min-duration runtimes))
-
-(def max-duration-netflix (max-duration netflix-runtimes))
-(def min-duration-netflix (min-duration netflix-runtimes))
-
-(def max-duration-hulu (max-duration hulu-runtimes))
-(def min-duration-hulu (min-duration hulu-runtimes))
-
-(def max-duration-disney (max-duration disney-runtimes))
-(def min-duration-disney (min-duration disney-runtimes))
-
-(def max-duration-prime (max-duration prime-runtimes))
-(def min-duration-prime (min-duration prime-runtimes))
-
-
-;; Average, max, min IMDb rate:
-
 (defn no-nil
   "Returns movies with no nil values from movies for specific column."
   [movies column]
@@ -203,6 +109,154 @@ the-newest-movie-year ;2020
    (reduce + column-values) 
    (count no-nil-movies))))
 
+(defn average-runtime 
+  "Returns average runtime."
+  []
+  (Math/round 
+   (average
+    (no-nil movies :runtime)
+    (get-values 
+     (no-nil movies :runtime) 
+     :runtime)))) ; 93.41, rounded: 93
+
+(defn netflix-average-runtime 
+  "Returns Netflix average runtime."
+  []
+  (Math/round 
+   (average
+    (no-nil movies-netflix :runtime)
+    (get-values 
+     (no-nil movies-netflix :runtime) 
+     :runtime)))) 
+
+
+(defn hulu-average-runtime 
+  "Returns Hulu average runtime."
+  []
+  (Math/round 
+   (average
+    (no-nil movies-hulu :runtime)
+    (get-values 
+     (no-nil movies-hulu :runtime) 
+     :runtime)))) 
+
+(defn disney-average-runtime 
+  "Returns Disney+ average runtime."
+  []
+  (Math/round 
+   (average
+    (no-nil movies-disney :runtime)
+    (get-values 
+     (no-nil movies-disney :runtime) 
+     :runtime))))
+
+(defn prime-average-runtime 
+  "Returns Prime Video average runtime."
+  []
+  (Math/round 
+   (average
+    (no-nil movies-prime :runtime)
+    (get-values 
+     (no-nil movies-prime :runtime) 
+     :runtime))))
+
+
+(defn max-value
+ "Returns max value in the list." 
+  [values]
+  (apply max values))
+
+(defn min-value
+ "Returns min value in the list." 
+  [values]
+  (apply min values))
+
+(defn max-duration-movies
+ "Returns max duration for all movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies :runtime) 
+    :runtime)))
+
+(defn min-duration-movies
+ "Returns min duration for all movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies :runtime) 
+    :runtime)))
+
+(defn max-duration-netflix
+ "Returns max duration for Netflix movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-netflix :runtime) 
+    :runtime)))
+
+(defn min-duration-netflix
+ "Returns min duration for Netflix movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-netflix :runtime) 
+    :runtime)))
+
+
+(defn max-duration-hulu
+ "Returns max duration for Hulu movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-hulu :runtime) 
+    :runtime)))
+
+(defn min-duration-hulu
+ "Returns min duration for Hulu movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-hulu :runtime) 
+    :runtime)))
+
+
+(defn max-duration-disney
+ "Returns max duration for Disney movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-disney :runtime) 
+    :runtime)))
+
+(defn min-duration-disney
+ "Returns min duration for Disney movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-disney :runtime) 
+    :runtime)))
+
+
+(defn max-duration-prime
+ "Returns max duration for Prime Video movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-prime :runtime) 
+    :runtime)))
+
+(defn min-duration-prime
+ "Returns min duration for Prime Video movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-prime :runtime) 
+    :runtime)))
+
+
+;; Average, max, min IMDb rate:
+
 (defn try-convert-string 
   "Convert string to integer (if it is possible)."
   [str]
@@ -216,6 +270,7 @@ the-newest-movie-year ;2020
   (try 
   (Double/valueOf str)
   (catch Exception e (identity 0))))
+
 
 (defn one-decimal
   "Round number to one decimal place."
@@ -272,6 +327,89 @@ the-newest-movie-year ;2020
     (no-nil movies-prime :imdb) 
     :imdb))))
 
+(defn max-imdb-movies
+ "Returns max IMDb all movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies :imdb) 
+    :imdb)))
+
+(defn min-imdb-movies
+ "Returns min IMDb all movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies :imdb) 
+    :imdb)))
+
+(defn max-imdb-netflix
+ "Returns max IMDb for Netflix movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-netflix :imdb) 
+    :imdb)))
+
+(defn min-imdb-netflix
+ "Returns min IMDb for Netflix movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-netflix :imdb) 
+    :imdb)))
+
+
+(defn max-imdb-hulu
+ "Returns max IMDb for Hulu movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-hulu :imdb) 
+    :imdb)))
+
+(defn min-imdb-hulu
+ "Returns min IMDb for Hulu movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-hulu :imdb) 
+    :imdb)))
+
+
+(defn max-imdb-disney
+ "Returns max IMDb for Disney movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-disney :imdb) 
+    :imdb)))
+
+(defn min-imdb-disney
+ "Returns min IMDb for Disney movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-disney :imdb) 
+    :imdb)))
+
+
+(defn max-imdb-prime
+ "Returns max IMDb for Prime Video movies." 
+  []
+  (max-value
+   (get-values 
+    (no-nil movies-prime :imdb) 
+    :imdb)))
+
+(defn min-imdb-prime
+ "Returns max IMDb for Prime Video movies." 
+  []
+  (min-value
+   (get-values 
+    (no-nil movies-prime :imdb) 
+    :imdb)))
+
 
 ;; I want to check movie deviation from mean, so we need variance and standard deviation
 
@@ -293,7 +431,13 @@ the-newest-movie-year ;2020
 (defn movies-variance
  "Returns movies runtime variance." 
   []
-  (Math/round (variance runtimes))) ; variance is 796
+  (Math/round 
+   (double 
+    (variance 
+     (get-values 
+      (no-nil movies :runtime) 
+      :runtime)))))
+(movies-variance); variance is 796
 
 ;; 2) Standard deviation
 
@@ -309,7 +453,12 @@ the-newest-movie-year ;2020
 (defn movies-standard-deviation
  "Returns movies duration standard deviation." 
   []
-  (Math/round (standard-deviation runtimes)))
+  (Math/round 
+   (double 
+    (standard-deviation 
+     (get-values 
+      (no-nil movies :runtime) 
+      :runtime)))))
 
 (movies-standard-deviation) ; the average deviation of the duration of the movies from the average value is 28
 
@@ -321,72 +470,61 @@ the-newest-movie-year ;2020
 (defn mode 
   "Returns most frequent value in data."
   [data]
-  (let [frequency-distribution (frequencies data)
-        sorted (sort-by
-                 (comp - second) frequency-distribution)
-        mxfreq (second (first sorted))]
-    (map first
-  (take-while
-    (fn [[val freq]]
-      (= mxfreq freq)) sorted))))
+  (let [frequency-distribution 
+        (frequencies data)
+        sorted 
+        (sort-by
+         (comp - second) 
+          frequency-distribution)
+        mxfreq 
+        (second 
+         (first sorted))]
+    (map 
+     first 
+     (take-while 
+      (fn [[val freq]]
+        (= mxfreq freq)) 
+      sorted))))
 
-(def mode-duration (mode runtimes)); its 90
-mode-duration
+(defn calculate-mode 
+  "Calculates mode for specific platform and column."
+  [movies-list column]
+  (mode 
+   (get-values 
+      (no-nil movies-list column) 
+      column)))
 
-;; we can see which movies have duration 90
-(defn movies-mode-duration
- "Returns movies with mode duration." 
-  []
-  (filter #(= (:runtime %) (nth mode-duration 0)) 
-          movies)) 
+(defn mode-duration
+  "Returns mode duration."
+ []
+  (calculate-mode movies :runtime)); its 90
 
-(movies-mode-duration)
-(count (movies-mode-duration)) ;971 movies
 
 ;; which language is most recurring:
-
-(def languages (map :language movies))
-(def mode-language (mode languages)); its English (only english)
-
-;; we can see which movies have language english
-(defn movies-mode-language
-  "Returns movies with most recur language."
+(defn mode-language 
+  "Returns mode language."
   []
-  (filter #(= (:language %) (nth mode-language 0)) 
-          movies)) 
-
-(movies-mode-language)
-(count (movies-mode-language)) ; 10 955 movies on English
+   (calculate-mode movies :language)); its English (only english)
 
 ;; which genre is most recurring:
 
-(def genres (map :genres movies))
-(def mode-genre (mode genres)) ; its Drama (only Drama)
-
-;; we can see which movies have genre drama
-(defn movies-mode-genre
- "Returns movies with most recur genre." 
+(defn mode-genre
+  "Returns mode genre."
   []
-  (filter #(= (:genres %) (nth mode-genre 0)) 
-          movies)) 
-
-(movies-mode-genre)
-(count (movies-mode-genre)) ; 1341 movie Drama
+  (calculate-mode movies :genres)) ; its Drama (only Drama)
 
 ;; which country is most recurring:
 
-(def countries (map :country movies))
-(def mode-country (mode countries)); its United States (only United States)
-
-;; we can see which movies have country United States
-(defn movies-mode-country
-  "Returns movies with most recur country." 
+(defn mode-country 
+   "Returns mode country."
   []
-  (filter #(= (:country %) "United States") 
-          movies)) 
+  (calculate-mode movies :country)); its United States (only United States)
 
-(movies-mode-country)
-(count (movies-mode-country)) ; 8776 movie from United States
+(defn mode-imdb
+   "Returns mode IMDb."
+  []
+  (calculate-mode movies :imdb))
+
 
 ;; search all movies or specific platform  
 ;; title, year, runtime, country, genre
@@ -410,6 +548,7 @@ mode-duration
   [year movies-passed] 
   (filter #(= (:year %) (try-convert-string year)) 
           movies-passed))
+(search-by-year "2020" movies-hulu)
 
 (defn search-by-runtime
  "Search movies by runtime." 
@@ -427,4 +566,12 @@ mode-duration
  "Search movies by genre." 
   [genre movies-passed] 
   (filter #(.contains (:genres %) (capitalize-words genre)) 
+          movies-passed))
+
+(defn search-by-imdb
+ "Search movies by IMDb rating." 
+  [imdb movies-passed] 
+  (filter #(= (:imdb %) (if (< (count imdb)  3) 
+                          (try-convert-string imdb) 
+                          (try-convert-string-double imdb))) 
           movies-passed))

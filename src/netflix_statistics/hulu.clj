@@ -1,7 +1,7 @@
 (ns hulu
   (:require [template :refer [template-page]]
             [movies-statistics :refer [movies-hulu search-by-genre search-by-country search-by-runtime
-                                       search-by-year search-by-title]]
+                                       search-by-year search-by-title search-by-imdb]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
 (defn- movie-search-box 
@@ -12,7 +12,7 @@
    (form-to [:post "/movies/hulu"]
             [:table
              [:tr
-              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, duration and genre: "]]
+              [:th {:style "width: 400px;"} "Search by Movie title, release year, country, IMDb rating, duration and genre: "]]
              [:tr
               [:td
                (text-field :criteria)
@@ -93,14 +93,15 @@
 
 
 (defn- get-data-by-search-criteria 
-  "Search by Movie title, release year, country, duration and genre."
+  "Search by Movie title, release year, country, IMDb rating, duration and genre."
   [criteria]
   (cond 
     (not-empty (search-by-year criteria movies-hulu)) (search-by-year criteria movies-hulu)
     (not-empty (search-by-title criteria movies-hulu)) (search-by-title criteria movies-hulu)
     (not-empty (search-by-country criteria movies-hulu)) (search-by-country criteria movies-hulu)
-    (not-empty (search-by-runtime criteria movies-hulu)) (search-by-runtime criteria movies-hulu)
     (not-empty (search-by-genre criteria movies-hulu)) (search-by-genre criteria movies-hulu)
+    (not-empty (search-by-imdb criteria movies-hulu)) (search-by-imdb criteria movies-hulu)
+    (not-empty (search-by-runtime criteria movies-hulu)) (search-by-runtime criteria movies-hulu)
     :else nil))
 
 (defn hulu-page
