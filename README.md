@@ -35,7 +35,7 @@ Application use following libraries:
 # Local run instructions
 
 * Install [Leiningen](https://github.com/technomancy/leiningen)
-* Navigate to filmo project and run **lein run [your port]** (for exampe you want to run this app on port 8080: **lein run 8080**)
+* Navigate to **filmlo** project and run **lein run [your port]** (for exampe you want to run this app on port 8080: **lein run 8080**)
 
 # References
 
