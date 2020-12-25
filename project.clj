@@ -1,4 +1,4 @@
-(defproject filmlo "0.1.2"
+(defproject filmlo "0.2.0"
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/data.json "1.0.0"]
                  [org.clojure/data.csv "1.0.0"]
