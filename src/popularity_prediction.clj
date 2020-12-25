@@ -33,7 +33,7 @@
 
 ;; load movies json
 (def json-movies (slurp "resources/movies.json"))
-(def movies-str (json/read-str json-movies ))
+(def movies-str (json/read-str json-movies))
 
 ;; movies atributes are in string form: "Name", "Actors", "Rotten Tomatoes" etc...
 ;; but, its easier to work with keys: :name, :actors, :rotten-tomatoes
@@ -41,12 +41,12 @@
 
 ;; "Rotten Tomatoes" to :rotten-tomatoes
 (defn to-keyword
- "Return string as keyword(lower case, with -)." 
+  "Return string as keyword(lower case, with -)."
   [str]
-  (keyword (lower-case 
+  (keyword (lower-case
             (clojure.string/replace str " " "-"))))
 
- 
+
 (defn keywordise
   "Apply to-keyword to all movies in vector."
   [movies]
@@ -66,33 +66,33 @@
 
 
 (defn insert-score-platform
-  "Insert platform score keyvalue to one movie." 
-  [movie points] 
+  "Insert platform score keyvalue to one movie."
+  [movie points]
   (assoc movie :score-platform points))
 
 
-(def netflix-movies 
-      (map (fn [e] (insert-score-platform e 3))           
-                 (filter #(= (:netflix %) 1) movies)))
+(def netflix-movies
+  (map (fn [e] (insert-score-platform e 3))
+       (filter #(= (:netflix %) 1) movies)))
 netflix-movies
 
 (count netflix-movies)
 
-(def hulu-movies 
-      (map (fn [e] (insert-score-platform e 2)) 
-                 (filter #(= (:hulu %) 1) movies)))
+(def hulu-movies
+  (map (fn [e] (insert-score-platform e 2))
+       (filter #(= (:hulu %) 1) movies)))
 hulu-movies
 (count hulu-movies)
 
-(def prime-movies 
-      (map (fn [e] (insert-score-platform e 1)) 
-                 (filter #(= (:prime-video %) 1) movies)))
+(def prime-movies
+  (map (fn [e] (insert-score-platform e 1))
+       (filter #(= (:prime-video %) 1) movies)))
 prime-movies
 (count prime-movies)
 
 (def disney-movies
-      (map (fn [e] (insert-score-platform e 0)) 
-                 (filter #(= (:disney+ %) 1) movies)))
+  (map (fn [e] (insert-score-platform e 0))
+       (filter #(= (:disney+ %) 1) movies)))
 
 disney-movies
 (count disney-movies)
@@ -112,12 +112,12 @@ movies-with-platform-score ;; from now, we use this movie data, and we will add 
 ;; 0% - 29% - 0 points
 
 
-(defn to-int [value] 
+(defn to-int [value]
   (Integer. (re-find  #"\d+" value)))
 
 
-(defn insert-score-rotten-tomatoes [movie points] 
-   (assoc movie :score-rotten-tomatoes points))
+(defn insert-score-rotten-tomatoes [movie points]
+  (assoc movie :score-rotten-tomatoes points))
 
 ;; be careful, Rotten tomatoes has empty values!
 
@@ -126,19 +126,19 @@ movies-with-platform-score ;; from now, we use this movie data, and we will add 
 
 ;; no-value r.t will get 0% (I suposse its not popular, or data is missing...)
 
-(defn zero [v] 
+(defn zero [v]
   (if (empty? v) 0 v))
 
-(def zero-no-value (map (fn [x] 
-                          (update x :rotten-tomatoes zero)) 
+(def zero-no-value (map (fn [x]
+                          (update x :rotten-tomatoes zero))
                         no-vaule))
 zero-no-value
 
 
 
 ;; r.t with value into integer ("85% -> 85"):
-(def int-has-value (map (fn [x] 
-                          (update x :rotten-tomatoes to-int)) 
+(def int-has-value (map (fn [x]
+                          (update x :rotten-tomatoes to-int))
                         has-value))
 int-has-value
 
@@ -153,8 +153,12 @@ int-has-value
 
 ;; apply to all movies:
 
- (def movies-with-platform-rotten-tomato-scores (map #(insert-score-rotten-tomatoes % (score-to-category (:rotten-tomatoes %)))
-       int-rt-movies-with-platform-score))
+(def movies-with-platform-rotten-tomato-scores
+  (map
+   #(insert-score-rotten-tomatoes %
+                                  (score-to-category
+                                   (:rotten-tomatoes %)))
+   int-rt-movies-with-platform-score))
 
 movies-with-platform-rotten-tomato-scores ;; this movies data we use in next steps :)
 
@@ -167,18 +171,18 @@ movies-with-platform-rotten-tomato-scores ;; this movies data we use in next ste
 directors
 
 ; insert score function:
-(defn insert-score-director [director points] 
+(defn insert-score-director [director points]
   (assoc director :score-director points))
 
 ; director names sequence:
-(def names ( map :Name directors))
+(def names (map :Name directors))
 
 ; check null values in movies data:
 (def nil-director-movies (filter #(= (:directors %) "") movies-with-platform-rotten-tomato-scores))
 
 ; that movies will get 0 points:
-(def zero-score (into [] 
-      (map (fn [e] (insert-score-director e 0)) nil-director-movies)))
+(def zero-score (into []
+                      (map (fn [e] (insert-score-director e 0)) nil-director-movies)))
 zero-score
 
 ;; no nil movies diretor:
@@ -188,7 +192,7 @@ no-nil-director-movies
 ;; if movies director name is in names sequence, that move gets 1 point :)
 
 (defn contains [director]
- (.contains names director))
+  (.contains names director))
 
 (defn directors-points [director]
   (cond
@@ -196,7 +200,7 @@ no-nil-director-movies
     true 0))
 
 (def has-value-with-score (map #(insert-score-director % (directors-points (:directors %)))
-       no-nil-director-movies))
+                               no-nil-director-movies))
 
 ;; merge zero-score and 
 (def movies-with-platform-rotten-tomato-scores-director (into zero-score has-value-with-score))
@@ -215,7 +219,7 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 
 ;; check if sequence group contains imdb rating:
 (defn contains-imdb [s imdb]
- (.contains s imdb))
+  (.contains s imdb))
 
 ;; checking nil values:
 (count (filter #(= (:imdb %) "") movies-with-platform-rotten-tomato-scores-director))
@@ -227,57 +231,57 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 (def no-nil-imdb-movies (filter #(not= (:imdb %) "") movies-with-platform-rotten-tomato-scores-director))
 
 
-(defn insert-score-imdb [imdb points] 
+(defn insert-score-imdb [imdb points]
   (assoc imdb :score-imdb points))
 
-(def zero-score-imdb-movies (into [] 
-      (map (fn [e] (insert-score-imdb e 0)) nil-val-imdb-movies)))
+(def zero-score-imdb-movies (into []
+                                  (map (fn [e] (insert-score-imdb e 0)) nil-val-imdb-movies)))
 
 (defn imdb-score [imdb]
- (cond
+  (cond
     (= (contains-imdb bad-ranking-group imdb) true) 0
     (= (contains-imdb average-ranking-group imdb) true) 1
     true 2))
 
 
- (def score-imdb-movies (map #(insert-score-imdb % (imdb-score (:imdb %)))
-       no-nil-imdb-movies))
+(def score-imdb-movies (map #(insert-score-imdb % (imdb-score (:imdb %)))
+                            no-nil-imdb-movies))
 
 ;; merge nil and no nil imdb movies:
 (def all-scores (into zero-score-imdb-movies score-imdb-movies))
 
 ;; movies in these three groups (ranking by imdb)
 (defn bad-ranking
- "Returns movies in bad ranking group by IMDb (from list with IMDB value)." 
+  "Returns movies in bad ranking group by IMDb (from list with IMDB value)."
   []
-  (filter #(= (:score-imdb %) 0) 
+  (filter #(= (:score-imdb %) 0)
           score-imdb-movies))
 
 (defn average-ranking
- "Returns movies in average ranking group by IMDb." 
+  "Returns movies in average ranking group by IMDb."
   []
-  (filter #(= (:score-imdb %) 1) 
+  (filter #(= (:score-imdb %) 1)
           all-scores))
- 
+
 (defn top-ranking
- "Returns movies in top ranking group by IMDb." 
+  "Returns movies in top ranking group by IMDb."
   []
-  (filter #(= (:score-imdb %) 2) 
+  (filter #(= (:score-imdb %) 2)
           all-scores))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; final score calculation
 ;;    final-score = score-platform + score-rotten-tomatoes + score-director + score-imdb
 
-(defn insert-final-score [movie sum-points] 
+(defn insert-final-score [movie sum-points]
   (assoc movie :score-final sum-points))
-  
+
 (defn sum [s1 s2 s3 s4]
   (reduce + [s1 s2 s3 s4]))
 
 (def movies-final-score (map #(insert-final-score % (sum (:score-imdb %) (:score-director %) (:score-rotten-tomatoes %) (:score-platform %)))
-       all-scores))
- 
+                             all-scores))
+
 
 ;; popular/not popular movies 
 
@@ -286,48 +290,48 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
     (< final-score 5) "not popular"
     true "popular"))
 
-(defn insert-popularity [movie popularity] 
+(defn insert-popularity [movie popularity]
   (assoc movie :popularity popularity))
 
 (def movies-popularity (map #(insert-popularity % (popularity (:score-final %)))
-       movies-final-score))
+                            movies-final-score))
 
 (count (filter #(= (:popularity %) "popular") movies-popularity)) ; 2092 popular movies!
 
 (defn popular-movies
- "Returns popular movies." 
+  "Returns popular movies."
   []
-  (filter #(= (:popularity %) "popular") 
+  (filter #(= (:popularity %) "popular")
           movies-popularity))
 
 
 (defn not-popular-movies
- "Returns not popular movies." 
+  "Returns not popular movies."
   []
-  (filter #(= (:popularity %) "not popular") 
+  (filter #(= (:popularity %) "not popular")
           movies-popularity))
 
 ;; adding :platform key to popular movies
 
-(defn insert-platform [movie name] 
+(defn insert-platform [movie name]
   (assoc movie :platform name))
 
 (defn platform-name [netflix hulu disney]
- (cond
+  (cond
     (= netflix 1) "Netflix"
     (= hulu 1) "Hulu"
     (= disney 1) "Disney+"
     true "Prime Video"))
 
 
- (defn popular-platform-movies 
-   "Returns popular movies with new key :platform and its value."
-   []
-   (map #(insert-platform % (platform-name 
-                             (:netflix %) 
-                             (:hulu %)
-                             (:disney+ %))) 
-        (popular-movies)))
+(defn popular-platform-movies
+  "Returns popular movies with new key :platform and its value."
+  []
+  (map #(insert-platform % (platform-name
+                            (:netflix %)
+                            (:hulu %)
+                            (:disney+ %)))
+       (popular-movies)))
 
 ;;;;;;; working with popular movies
 
@@ -339,7 +343,7 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
 (defn top-movies
   "Returns movies with highest score (8)"
   []
-  (filter #(= (:score-final %) 8) 
+  (filter #(= (:score-final %) 8)
           (popular-platform-movies)))
 
 (defn num-top-movies
@@ -354,7 +358,7 @@ movies-with-platform-rotten-tomato-scores-director ;; we use this movies for nex
        (map clojure.string/capitalize)
        clojure.string/join))
 
-(defn search-by-platform 
+(defn search-by-platform
   "Search popular movies by platform."
   [platform movies-passed]
   (filter #(.contains (:platform %) (capitalize-words platform))

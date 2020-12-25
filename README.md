@@ -1,11 +1,11 @@
 # FilmLo- Movies statistics and predictions
 
-This app contains statistics and predicates popularity for movies on Netflix, Hulu, Prime Video and Disney+ platform.
-Also, FilmLo include all Netflix  portforilo (movies and TV series) and statistics for them.
+This app contains statistics and predicates popularity of movies on Netflix, Hulu, Prime Video and Disney+ platform.
+Also, FilmLo include all Netflix  portforilo (Movies and TV Shows) and statistics for them.
 
 FilmLo is written in Clojure programming language. More about Clojure: https://clojure.org/
 
-Application use following libraries:
+The application uses following libraries:
 * [Data.json](https://github.com/clojure/data.json)
 * [Data.csv](https://github.com/clojure/data.csv)
 * [Compojure](https://github.com/weavejester/compojure)
@@ -15,15 +15,15 @@ Application use following libraries:
 * [Hickory](https://github.com/davidsantiago/hickory)
 * [Midje](https://github.com/marick/Midje)
 
-**Home page**- on home page is Top list popular movies from Netflix, Hulu, Prime Video and Disney+ platform. All popular movies are on Popular movies page
+**Home page**- on the home page is Top list popular movies from Netflix, Hulu, Prime Video and Disney+ platform. All popular movies are on Popular movies page
 
 **Netflix portfolio page**- on this page is all Netflix portfolio (Movies and TV Shows). You can search portfolio by title, release year, country, duration or type (Movie/TV Show)
 
-**Netflix stats page**- Netflix portfolio statistics (total count, the oldest/newest Movie/Tv Show, max/min duration for Movies/TV Shows. average duration and Mode (most repetitive values): Year, Genre, Country, Rating system)
+**Netflix stats page**- Netflix portfolio statistics (total count, the oldest/newest Movie/Tv Show, max/min duration for Movies/TV Shows, average duration and Mode (most repetitive values): Year, Genre, Country, Rating system)
 
-**Movies page**- all movies from Netflix, Hulu, Prime Video and Disney+ platform. You can search movies by title, release year, country, IMDb rating, language, duration or genre. Also, you can do this search for specific platform by choosing platform name from the list
+**Movies page**- all movies from Netflix, Hulu, Prime Video and Disney+ platform. You can search movies by title, release year, country, IMDb rating, language, duration or genre. Also, you can do this search for specific platform by choosing the platform name from the list
 
-**Movies stats page**- Movies statistics (total count, the oldest/newest movie/s, average duration for all movies and for specific platform, max/min duration (for all movies and specific platform), duration standard deviation, average IMDb rate (for all movies and specific platform), max/min IMDb (for all movies and specific platform), IMDb standard deviation and Mode (most repetitive values): Duration, Language, Genre, Country, IMDb)
+**Movies stats page**- Movies statistics (total count, the oldest/newest movie/s, average duration of all movies and for a specific platform, max/min duration (for all movies and specific platform), duration standard deviation, average IMDb rate (for all movies and specific platform), max/min IMDb (for all movies and specific platform), IMDb standard deviation and Mode (most repetitive values): Duration, Language, Genre, Country, IMDb)
 
 **Popular movies page**- Popular movies list. You can search movies by title, release year, country, IMDb rating, language, duration, genre or platform
 
@@ -35,7 +35,7 @@ Application use following libraries:
 # Local run instructions
 
 * Install [Leiningen](https://github.com/technomancy/leiningen)
-* Navigate to **filmlo** project and run **lein run [your port]** (for exampe you want to run this app on port 8080: **lein run 8080**)
+* Navigate to **filmlo** project and run **lein run [your port]** (for example, you want to run this app on port 8080: **lein run 8080**)
 
 # References
 

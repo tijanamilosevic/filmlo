@@ -172,47 +172,38 @@
 
 
 
-(defn- menu 
+(defn- menu
   "Display main menu and mark selected page."
   [uri]
   (cond
     (= uri "/") (home-selected)
-    (= uri "/netflix-portfolio") (portfolio-selected) 
+    (= uri "/netflix-portfolio") (portfolio-selected)
     (= uri "/netflix-statistics") (netflix-stats-selected)
-    (= uri "/movies")(movies-selected)
-    (= uri "/movies/hulu")(movies-selected)
-    (= uri "/movies/disney")(movies-selected)
-    (= uri "/movies/prime")(movies-selected)
-    (= uri "/movies-stats")(movies-stats-selected)
+    (= uri "/movies") (movies-selected)
+    (= uri "/movies/hulu") (movies-selected)
+    (= uri "/movies/disney") (movies-selected)
+    (= uri "/movies/prime") (movies-selected)
+    (= uri "/movies-stats") (movies-stats-selected)
     (= uri "/movies-popularity") (movies-popularity-selected)
     (= uri "/kids-movies") (kids-movies-selected)
     true (imdb-ranking-selected))) 
 
 
-(defn template-page 
+(defn template-page
   "Display header, main menu, body content for all pages."
   [title uri content]
-  (html 
-    [:head
-     [:meta {:charset "UTF-8"}]
-     [:link {:rel "stylesheet" 
-             :href "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"}] 
-     [:link {:rel "schortcut icon" :type "image/png" :href "/logo.png"}]
-     [:title title]
-     (include-css "/style.css")]
-    [:body  
-     [:div#header 
-      [:div  {:style "width: 1050px !important;"}
-       [:a.logo
-        [:img {:src "/logo.png" :alt "FilmLo"}]]
-       (menu uri)]]    
-     [:div#body content]
-     
-      ;;  [:div#footer
-      ;;   [:p "Copyright &copy; 2020. All Rights Reserved"]]
-      ;; [:footer.footer-distributed
-      ;; [:div.footer-left
-      ;;  [:img.logo-footer {:src "/logo.png" :alt "FilmLo"}]]
-      ;; [:div.footer-center
-      ;;  [:p.footer-copyright "Copyright &copy; 2020. All Rights Reserved"]]]
-     ]))
+  (html
+   [:head
+    [:meta {:charset "UTF-8"}]
+    [:link {:rel "stylesheet"
+            :href "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"}]
+    [:link {:rel "schortcut icon" :type "image/png" :href "/logo.png"}]
+    [:title title]
+    (include-css "/style.css")]
+   [:body
+    [:div#header
+     [:div  {:style "width: 1050px !important;"}
+      [:a.logo
+       [:img {:src "/logo.png" :alt "FilmLo"}]]
+      (menu uri)]]
+    [:div#body content]]))

@@ -1,6 +1,6 @@
 (ns movies-stats
   (:require [template :refer [template-page]]
-            [movies-statistics :refer [num-movies the-oldest-movie-year 
+            [movies-statistics :refer [num-movies the-oldest-movie-year
                                        get-the-oldest-movie the-newest-movie-year
                                        average-runtime
                                        prime-average-runtime disney-average-runtime
@@ -14,7 +14,7 @@
                                        average-imdb-prime average-imdb-disney
                                        average-imdb-hulu average-imdb-netflix
                                        average-imdb min-imdb-prime max-imdb-prime
-                                       min-imdb-disney max-imdb-disney 
+                                       min-imdb-disney max-imdb-disney
                                        min-imdb-hulu max-imdb-hulu
                                        min-imdb-netflix max-imdb-netflix
                                        min-imdb-movies max-imdb-movies
@@ -22,7 +22,7 @@
                                        mode-language mode-duration imdb-standard-deviation]]))
 
 
-(defn- statistics-one 
+(defn- statistics-one
   "Show total count movies and the oldest movie(s)."
   []
   [:div.movie
@@ -34,7 +34,7 @@
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 20px !important;
-	              margin-left: 30px !important;"}  
+	              margin-left: 30px !important;"}
     "Total count movies: " [:b num-movies]]
    [:h2 {:style "margin-top: 20px; font-size: 25px; color:#ff9600;"} "The oldest/newest movie(s)"]
    [:div {:style "width: 400px !important; 
@@ -43,37 +43,37 @@
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 20px !important;
-	              margin-left: 30px !important;"}  
+	              margin-left: 30px !important;"}
     "The oldest movie is from: " [:b the-oldest-movie-year]]
-   [:div 
+   [:div
     [:table
-        [:tr
-          [:th {:style "width: 400px;"} "The oldest movie(s):"]]]]])
+     [:tr
+      [:th {:style "width: 400px;"} "The oldest movie(s):"]]]]])
 
 
-(defn- statistics-two 
+(defn- statistics-two
   "Show the newest movie(s)."
   []
   [:div
-  [:div {:style "width: 400px !important; 
+   [:div {:style "width: 400px !important; 
 	              color: #b9b9b9 !important; 
 	              font-family: 'Forum-Regular' !important; 
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 8px !important;
-	              margin-left: 30px !important;"}  
-   "The newest movie is from: " [:b the-newest-movie-year]]
-  [:div {:style "width: 1000px !important; 
+	              margin-left: 30px !important;"}
+    "The newest movie is from: " [:b the-newest-movie-year]]
+   [:div {:style "width: 1000px !important; 
 	              color: #b9b9b9 !important; 
 	              font-family: 'Forum-Regular' !important; 
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 8px !important;
-	              margin-left: 30px !important;"}  
-   "The newest movie(s) you can see here: " [:a {:href (str "/movies/" the-newest-movie-year "&1")
-                                                 :style "color: #ff9600 !important; 
-                                                         text-decoration: underline !important;"} 
-                                             "The newest movies"]]])
+	              margin-left: 30px !important;"}
+    "The newest movie(s) you can see here: " [:a {:href (str "/movies/" the-newest-movie-year "&1")
+                                                  :style "color: #ff9600 !important; 
+                                                         text-decoration: underline !important;"}
+                                              "The newest movies"]]])
 
 (defn- average-duration-table
   "Show average duration table."
@@ -88,12 +88,12 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (str (average-runtime) " min")]]
-                  [:td [:div (str (netflix-average-runtime) " min")]]
-                  [:td [:div (str (hulu-average-runtime) " min")]]
-                  [:td [:div (str (disney-average-runtime) " min")]]
-                  [:td [:div (str (prime-average-runtime) " min")]]])]]])
+     (identity [:tr
+                [:td [:div (str (average-runtime) " min")]]
+                [:td [:div (str (netflix-average-runtime) " min")]]
+                [:td [:div (str (hulu-average-runtime) " min")]]
+                [:td [:div (str (disney-average-runtime) " min")]]
+                [:td [:div (str (prime-average-runtime) " min")]]])]]])
 
 
 (defn- duration-table
@@ -106,11 +106,11 @@
      [:tr
       [:th "Average deviation from the mean value"]
       [:th "Max duration"]
-      [:th "Min duration"] ]
-       (identity [:tr
-                  [:td [:div (str (movies-standard-deviation) " min")]]
-                  [:td [:div (str (max-duration-movies) " min")]]
-                  [:td [:div (str (min-duration-movies) " min")]]])]]])
+      [:th "Min duration"]]
+     (identity [:tr
+                [:td [:div (str (movies-standard-deviation) " min")]]
+                [:td [:div (str (max-duration-movies) " min")]]
+                [:td [:div (str (min-duration-movies) " min")]]])]]])
 
 (defn- max-duration-table
   "Show max duration table."
@@ -124,11 +124,11 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (str (max-duration-netflix) " min")]]
-                  [:td [:div (str (max-duration-hulu) " min")]]
-                  [:td [:div (str (max-duration-disney) " min")]]
-                  [:td [:div (str (max-duration-prime) " min")]]])]]])
+     (identity [:tr
+                [:td [:div (str (max-duration-netflix) " min")]]
+                [:td [:div (str (max-duration-hulu) " min")]]
+                [:td [:div (str (max-duration-disney) " min")]]
+                [:td [:div (str (max-duration-prime) " min")]]])]]])
 
 (defn- min-duration-table
   "Show min duration table."
@@ -142,11 +142,11 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (str (min-duration-netflix) " min")]]
-                  [:td [:div (str (min-duration-hulu) " min")]]
-                  [:td [:div (str (min-duration-disney) " min")]]
-                  [:td [:div (str (min-duration-prime) " min")]]])]]])
+     (identity [:tr
+                [:td [:div (str (min-duration-netflix) " min")]]
+                [:td [:div (str (min-duration-hulu) " min")]]
+                [:td [:div (str (min-duration-disney) " min")]]
+                [:td [:div (str (min-duration-prime) " min")]]])]]])
 
 (defn- average-imdb-table
   "Show average imdbtable."
@@ -161,12 +161,12 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (average-imdb)]]
-                  [:td [:div (average-imdb-netflix)]]
-                  [:td [:div (average-imdb-hulu)]]
-                  [:td [:div (average-imdb-disney)]]
-                  [:td [:div (average-imdb-prime)]]])]]])
+     (identity [:tr
+                [:td [:div (average-imdb)]]
+                [:td [:div (average-imdb-netflix)]]
+                [:td [:div (average-imdb-hulu)]]
+                [:td [:div (average-imdb-disney)]]
+                [:td [:div (average-imdb-prime)]]])]]])
 
 (defn- imdb-table
   "Show imdb standard deviation, max and min duration."
@@ -178,38 +178,38 @@
      [:tr
       [:th "Average deviation from the mean value"]
       [:th "Max IMDb"]
-      [:th "Min IMDb"] ]
-       (identity [:tr
-                  [:td [:div (imdb-standard-deviation)]]
-                  [:td [:div (max-imdb-movies)]]
-                  [:td [:div (min-imdb-movies)]]])]]])
+      [:th "Min IMDb"]]
+     (identity [:tr
+                [:td [:div (imdb-standard-deviation)]]
+                [:td [:div (max-imdb-movies)]]
+                [:td [:div (min-imdb-movies)]]])]]])
 
-(defn- statistics-three 
+(defn- statistics-three
   "Show max/min imdb movies links."
   []
   [:div
-  [:div {:style "width: 1000px !important; 
+   [:div {:style "width: 1000px !important; 
 	              color: #b9b9b9 !important; 
 	              font-family: 'Forum-Regular' !important; 
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 8px !important;
-	              margin-left: 30px !important;"}  
-   "Movies with max IMDb you can see here: " [:a {:href (str "/movies/" (max-imdb-movies) "&1")
-                                                  :style "color: #ff9600 !important; 
-                                                          text-decoration: underline !important;"} 
-                                              "The best IMDb rating movies"]]
-  [:div {:style "width: 1000px !important; 
+	              margin-left: 30px !important;"}
+    "Movies with max IMDb you can see here: " [:a {:href (str "/movies/" (max-imdb-movies) "&1")
+                                                   :style "color: #ff9600 !important; 
+                                                          text-decoration: underline !important;"}
+                                               "The best IMDb rating movies"]]
+   [:div {:style "width: 1000px !important; 
 	              color: #b9b9b9 !important; 
 	              font-family: 'Forum-Regular' !important; 
                   font-size: 18px !important;
 	              font-weight: normal !important;
 	              margin-top: 8px !important;
-	              margin-left: 30px !important;"}  
-   "Movies with min IMDb you can see here: " [:a {:href (str "/movies/" (min-imdb-movies) "&1")
-                                                 :style "color: #ff9600 !important; 
-                                                         text-decoration: underline !important;"} 
-                                             "The worst IMDb rating movies"]]])
+	              margin-left: 30px !important;"}
+    "Movies with min IMDb you can see here: " [:a {:href (str "/movies/" (min-imdb-movies) "&1")
+                                                   :style "color: #ff9600 !important; 
+                                                         text-decoration: underline !important;"}
+                                               "The worst IMDb rating movies"]]])
 
 (defn- max-imdb-table
   "Show max IMDb table."
@@ -223,11 +223,11 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (max-imdb-netflix)]]
-                  [:td [:div (max-imdb-hulu)]]
-                  [:td [:div (max-imdb-disney)]]
-                  [:td [:div (max-imdb-prime)]]])]]])
+     (identity [:tr
+                [:td [:div (max-imdb-netflix)]]
+                [:td [:div (max-imdb-hulu)]]
+                [:td [:div (max-imdb-disney)]]
+                [:td [:div (max-imdb-prime)]]])]]])
 
 (defn- min-imdb-table
   "Show min IMDb table."
@@ -241,11 +241,11 @@
       [:th "Hulu"]
       [:th "Disney+"]
       [:th "Prime Video"]]
-       (identity [:tr
-                  [:td [:div (min-imdb-netflix)]]
-                  [:td [:div (min-imdb-hulu)]]
-                  [:td [:div (min-imdb-disney)]]
-                  [:td [:div (min-imdb-prime)]]])]]])
+     (identity [:tr
+                [:td [:div (min-imdb-netflix)]]
+                [:td [:div (min-imdb-hulu)]]
+                [:td [:div (min-imdb-disney)]]
+                [:td [:div (min-imdb-prime)]]])]]])
 
 (defn- mode-table
   "Show most repetitive values."
@@ -260,38 +260,38 @@
       [:th "Genre"]
       [:th "Country"]
       [:th "IMDb"]]
-       [:tr
-        [:td [:div (str (nth (mode-duration) 0) " min")]]
-        [:td [:div (nth (mode-language) 0)]]
-        [:td [:div (nth (mode-genre) 0)]]
-        [:td [:div (nth (mode-country) 0)]]
-        [:td [:div (nth (mode-imdb) 0)]]]
      [:tr
-        [:td 
-         [:div 
-          [:a {:href (str "/movies/" (nth (mode-duration) 0) "&1")
-               :style "color: #ff9600 !important; text-decoration: underline !important;"} 
-              "See movies"]]]
-        [:td 
-         [:div 
-          [:a {:href (str "/movies/" (nth (mode-language) 0) "&1")
-               :style "color: #ff9600 !important; text-decoration: underline !important;"} 
-              "See movies"]]]
-        [:td 
-         [:div 
-          [:a {:href (str "/movies/" (nth (mode-genre) 0) "&1")
-               :style "color: #ff9600 !important; text-decoration: underline !important;"} 
-               "See movies"]]]
-        [:td 
-         [:div 
-          [:a {:href (str "/movies/" (nth (mode-country) 0) "&1")
-               :style "color: #ff9600 !important; text-decoration: underline !important;"} 
-              "See movies"]]]
-        [:td 
-         [:div 
-          [:a {:href (str "/movies/" (nth (mode-imdb) 0) "&1")
-               :style "color: #ff9600 !important; text-decoration: underline !important;"} 
-              "See movies"]]]]]]])
+      [:td [:div (str (nth (mode-duration) 0) " min")]]
+      [:td [:div (nth (mode-language) 0)]]
+      [:td [:div (nth (mode-genre) 0)]]
+      [:td [:div (nth (mode-country) 0)]]
+      [:td [:div (nth (mode-imdb) 0)]]]
+     [:tr
+      [:td
+       [:div
+        [:a {:href (str "/movies/" (nth (mode-duration) 0) "&1")
+             :style "color: #ff9600 !important; text-decoration: underline !important;"}
+         "See movies"]]]
+      [:td
+       [:div
+        [:a {:href (str "/movies/" (nth (mode-language) 0) "&1")
+             :style "color: #ff9600 !important; text-decoration: underline !important;"}
+         "See movies"]]]
+      [:td
+       [:div
+        [:a {:href (str "/movies/" (nth (mode-genre) 0) "&1")
+             :style "color: #ff9600 !important; text-decoration: underline !important;"}
+         "See movies"]]]
+      [:td
+       [:div
+        [:a {:href (str "/movies/" (nth (mode-country) 0) "&1")
+             :style "color: #ff9600 !important; text-decoration: underline !important;"}
+         "See movies"]]]
+      [:td
+       [:div
+        [:a {:href (str "/movies/" (nth (mode-imdb) 0) "&1")
+             :style "color: #ff9600 !important; text-decoration: underline !important;"}
+         "See movies"]]]]]]])
 
 (defn- list-movies
   "List Movies."
@@ -310,16 +310,16 @@
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
-       (identity [:tr
-                  [:td [:div (:no (swap! x update :no inc))]]
-                  [:td [:div (movie :title)]]
-                  [:td [:div (movie :genres)]]
-                  [:td [:div (movie :year)]]
-                  [:td [:div (movie :runtime)]]
-                  [:td [:div (movie :country)]]
-                  [:td [:div (movie :imdb)]]])))]]])
+         (identity [:tr
+                    [:td [:div (:no (swap! x update :no inc))]]
+                    [:td [:div (movie :title)]]
+                    [:td [:div (movie :genres)]]
+                    [:td [:div (movie :year)]]
+                    [:td [:div (movie :runtime)]]
+                    [:td [:div (movie :country)]]
+                    [:td [:div (movie :imdb)]]])))]]])
 
-(defn- movies-layout 
+(defn- movies-layout
   "Show list movies."
   [movies-list]
   [:div.body
@@ -339,8 +339,8 @@
 
 
 (defn movies-stats-page
-  "Show statistics." 
-  ([uri] (template-page 
-           "Movies statistics" 
-           uri 
-           (movies-layout (get-the-oldest-movie)))))
+  "Show statistics."
+  ([uri] (template-page
+          "Movies statistics"
+          uri
+          (movies-layout (get-the-oldest-movie)))))

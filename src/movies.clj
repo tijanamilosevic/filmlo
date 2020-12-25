@@ -5,20 +5,20 @@
                                        search-by-language]]
             [hiccup.form :refer [form-to text-field submit-button]]))
 
-(defn- movie-search-box 
+(defn- movie-search-box
   "Show movie search form."
   []
   [:div.movie
    [:h2 "Search movies from Netflix, Hulu, Disney+ and Prime Video:"]
-            [:div {:class "dropdown"}
-             [:button {:class "dropbtn"}
-              "Choose platform"
-              [:i {:class "fa fa-caret-down"}]]
-             [:div {:class "dropdown-content"}
-              [:a {:href "/netflix-portfolio"} "Netflix"]
-              [:a {:href "/movies/hulu"} "Hulu"]
-              [:a {:href "/movies/disney"} "Disney+"]
-              [:a {:href "/movies/prime"} "Prime Video"]]]
+   [:div {:class "dropdown"}
+    [:button {:class "dropbtn"}
+     "Choose platform"
+     [:i {:class "fa fa-caret-down"}]]
+    [:div {:class "dropdown-content"}
+     [:a {:href "/netflix-portfolio"} "Netflix"]
+     [:a {:href "/movies/hulu"} "Hulu"]
+     [:a {:href "/movies/disney"} "Disney+"]
+     [:a {:href "/movies/prime"} "Prime Video"]]]
    (form-to [:post "/movies"]
             [:table
              [:tr
@@ -47,70 +47,70 @@
       [:th "Country"]
       [:th "IMDb Rating"]
       [:th "Language"]
-      [:th "Rotten Tomatoes"]]    
+      [:th "Rotten Tomatoes"]]
      (let [x (atom {})]
        (swap! x assoc :no 0)
        (for [movie movies]
-       (identity [:tr
-                  [:td [:div (:no (swap! x update :no inc))]]
-                  [:td [:div (movie :title)]]
-                  [:td [:div (movie :genres)]]
-                  [:td [:div (movie :year)]]
-                  [:td [:div (movie :runtime)]]
-                  [:td [:div (movie :country)]]
-                  [:td [:div (movie :imdb)]]
-                  [:td [:div (movie :language)]]
-                  [:td [:div (movie :rotten-tomatoes)]]])))]]])
+         (identity [:tr
+                    [:td [:div (:no (swap! x update :no inc))]]
+                    [:td [:div (movie :title)]]
+                    [:td [:div (movie :genres)]]
+                    [:td [:div (movie :year)]]
+                    [:td [:div (movie :runtime)]]
+                    [:td [:div (movie :country)]]
+                    [:td [:div (movie :imdb)]]
+                    [:td [:div (movie :language)]]
+                    [:td [:div (movie :rotten-tomatoes)]]])))]]])
 
 
 (defn- pagination
   "Creates pagination part on page."
   [criteria page last]
-  (if-not (= 0 last) 
+  (if-not (= 0 last)
     [:p
      (if-not (= 1 page)
        [:span
         [:a {:href (str "/movies/" criteria "&1")} "<< First"] " "
         (if-not (= 2 page)
-          [:a {:href (str "/movies/" criteria "&" (- page 1))} "< Previous"])])  
+          [:a {:href (str "/movies/" criteria "&" (- page 1))} "< Previous"])])
      (if-not (= 1 last)
-       [:span " " [:b (str page " of " last " pages")] " "])    
+       [:span " " [:b (str page " of " last " pages")] " "])
      (if-not (= last page)
        [:span
         [:a {:href (str "/movies/" criteria "&" (+ page 1))} "Next >"] " "
         (if-not (= (- last 1) page)
-          [:a {:href (str "/movies/" criteria "&" last)} "Last >>"])])]))  
+          [:a {:href (str "/movies/" criteria "&" last)} "Last >>"])])]))
 
 
-(defn- movies-layout 
+(defn- movies-layout
   "Show movies search form, pagination and list movies."
   [movies-list criteria page]
   [:div.body
    (movie-search-box)
    (let [movies (take 10 (drop (* 10 (- page 1)) movies-list))]
-    (if-not (or (= criteria "") (clojure.string/blank? criteria))
-       (if-not (empty? movies) 
-       [:div
-        [:div {:style "float: right;"}
-         (pagination criteria page
-                     (let [number-of-pages (/ (count movies-list) 10)]
-                       (if (ratio? number-of-pages)
-                         (int (inc (Math/floor (double number-of-pages))))
-                         number-of-pages)))]
-        [:div {:style "float: right;"}
-         [:p
-          [:span (str (count movies-list)" results " "found")]]]
-        (list-movies movies)]
-       (if (= criteria "all")
-         [:p "List is empty."]
-         [:p "No matching data."]))
-      [:div {:class "message"} "You must enter search criteria!"]))])
+     (if-not (or (= criteria "") (clojure.string/blank? criteria))
+       (if-not (empty? movies)
+         [:div
+          [:div {:style "float: right;"}
+           (pagination criteria page
+                       (let [number-of-pages (/ (count movies-list) 10)]
+                         (if (ratio? number-of-pages)
+                           (int (inc (Math/floor (double number-of-pages))))
+                           number-of-pages)))]
+          [:div {:style "float: right;"}
+           [:p
+            [:span (str (count movies-list) " results " "found")]]]
+          (list-movies movies)]
+         (if (= criteria "all")
+           [:p "List is empty."]
+           [:p "No matching data."]))
+       [:div {:class "message"} "You must enter search criteria!"]))])
 
 
-(defn- get-data-by-search-criteria 
+(defn- get-data-by-search-criteria
   "Search by Movie title, release year, IMDB rating, language. country, duration and genre."
   [criteria]
-  (cond 
+  (cond
     (not-empty (search-by-year criteria movies)) (search-by-year criteria movies)
     (not-empty (search-by-title criteria movies)) (search-by-title criteria movies)
     (not-empty (search-by-country criteria movies)) (search-by-country criteria movies)
@@ -119,17 +119,17 @@
     (not-empty (search-by-imdb criteria movies)) (search-by-imdb criteria movies)
     (not-empty (search-by-runtime criteria movies)) (search-by-runtime criteria movies)
     :else nil))
-(get-data-by-search-criteria "5")
+
 (defn movies-page
-  "Show Movies page depending on search criteria." 
-  ([uri] (template-page 
-           "Movies" 
-           uri 
-           (movies-layout movies "all" 1)))
-  ([uri criteria page] (template-page 
-                         "Movies" 
-                         uri 
-                         (movies-layout (if (= criteria "all")
-                                              movies
-                                             (get-data-by-search-criteria criteria)) 
-                                           criteria page))))
+  "Show Movies page depending on search criteria."
+  ([uri] (template-page
+          "Movies"
+          uri
+          (movies-layout movies "all" 1)))
+  ([uri criteria page] (template-page
+                        "Movies"
+                        uri
+                        (movies-layout (if (= criteria "all")
+                                         movies
+                                         (get-data-by-search-criteria criteria))
+                                       criteria page))))

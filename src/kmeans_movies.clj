@@ -6,7 +6,7 @@
 (def movies (json/read-str json-file :key-fn keyword))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Kmeans for movies ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
+
 ; I want to classify movies by IMDb rating
 (def movies-ratings (map :IMDb movies))
 
@@ -25,9 +25,9 @@
 ;; You may be able to see some natural groupings in this data.
 
 ;; It's easy enough to say how far one number is from another
-(defn distance[a b] = (if (< a b) 
-                        (- b a) 
-                        (- a b)))
+(defn distance [a b] = (if (< a b)
+                         (- b a)
+                         (- a b)))
 
 ;; To do K-means, we need to start with some guesses about where the clusters are
 ;; I choose: 
@@ -39,7 +39,7 @@
 (def max-rating (apply max ratings)) ; max is 9.3
 
 ;mean value:
-(defn average-ratings [s] 
+(defn average-ratings [s]
   (double (/ (reduce + s) (count s))))
 
 (def ratings-mean (average-ratings ratings))
@@ -75,10 +75,10 @@ ratings-mean ; mean is 5.9
     (if (contains? point-groups o)
       (apply average (get point-groups o)) o)))
 
-(def groups-average (new-means average (point-groups guessed-means ratings distance) 
+(def groups-average (new-means average (point-groups guessed-means ratings distance)
                                guessed-means)) ; (2.4421711899791205 5.848244106934228 8.046894138232716)
 
-(def first-group-average (first groups-average)) 
+(def first-group-average (first groups-average))
 (def second-group-average (second groups-average))
 (def third-group-average (last groups-average))
 

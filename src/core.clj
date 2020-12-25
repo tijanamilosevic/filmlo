@@ -1,10 +1,8 @@
 (ns core
   (:require [compojure.route :as route]
             [noir.session :as session]
-            [ring.util.response :as response]
             [compojure.core :refer [defroutes GET POST]]
             [ring.adapter.jetty :refer [run-jetty]]
-            [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.middleware.params :refer [wrap-params]]
             [index :refer [index-page]]
@@ -21,7 +19,7 @@
             [movies-stats :refer [movies-stats-page]]
             [netflix-stats :refer [netflix-stats-page]]
             [kids-movies :refer [kids-movies-page]]))
-  
+
 (defroutes handler
   (GET "/" [] (index-page "/"))
   (GET "/netflix-portfolio" [] (netflix-portfolio-page "/netflix-portfolio"))
@@ -72,26 +70,24 @@
     (bad-page "/imdb-ranking-groups/bad" criteria (Integer/valueOf page)))
   (GET "/movies-stats" [] (movies-stats-page "/movies-stats"))
   (GET "/netflix-statistics" [] (netflix-stats-page "/netflix-statistics"))
-
   (GET "/kids-movies" [] (kids-movies-page "/kids-movies"))
   (POST "/kids-movies" [criteria]
     (kids-movies-page "/kids-movies" criteria 1))
   (GET "/kids-movies/:criteria&:page" [criteria page]
     (kids-movies-page "/kids-movies" criteria (Integer/valueOf page)))
-  
   (route/resources "/")
   (route/not-found "404 Page not found"))
 
 (def app
   (-> #'handler
-    (wrap-params)
-    (session/wrap-noir-flash)
-    (wrap-stacktrace)))
+      (wrap-params)
+      (session/wrap-noir-flash)
+      (wrap-stacktrace)))
 
-(defn start-server [port] 
+(defn start-server [port]
   (run-jetty #'app {:port port :join? false})
-  (println (str "\nWelcome to FilmLo- movies statistics and predictions! Browse to http://localhost:" 
-                port 
+  (println (str "\nWelcome to FilmLo- movies statistics and predictions! Browse to http://localhost:"
+                port
                 " to see statistics and predictions now!")))
 
 (defn -main [port]
